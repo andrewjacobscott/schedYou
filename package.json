@@ -1,0 +1,26 @@
+{
+  "name": "schedyou",
+  "version": "1.0.0",
+  "description": "README file",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andrewjacobscott/schedYou.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andrewjacobscott/schedYou/issues"
+  },
+  "homepage": "https://github.com/andrewjacobscott/schedYou#readme",
+  "devDependencies": {
+    "electron": "^3.0.2"
+  },
+  "dependencies": {
+    "electron-middle-sass": "^1.0.2"
+  }
+}
