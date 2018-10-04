@@ -10,4 +10,13 @@ function createWindow(){
     window.loadFile('index.html');
 }
 
+function createButton() {
+  newWindow = new BrowserWindow({width: 1000, height: 600});
+
+  //load html file
+  newWindow.loadFile('button.html');
+
+}
+
+
 app.on('ready', createWindow);

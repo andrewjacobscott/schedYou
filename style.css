@@ -42,11 +42,12 @@ th:last-child{
 }
 i{
     vertical-align: middle;
-    font-size: 2em; 
+    font-size: 2em;
 }
 
 tbody, tr{
     background: #a9b1bc;
+    color: #990000
 }
 
 tr:nth-child(odd){
@@ -59,8 +60,10 @@ td{
     border-left: 1px solid #626E7E;
     position: relative;
     height: 32px;
-    cursor: pointer; 
+    cursor: pointer;
 }
+
+
 .hour{
     font-size: 2em;
     padding: 0;
@@ -74,3 +77,15 @@ td{
 .hour:span{
     display: block;
 }
+
+label{
+  display: block;
+  width: 1000px;
+}
+/*
+
+tbody{
+    display: block;
+    height: 100px;
+    overflow-y: scroll;
+}*/

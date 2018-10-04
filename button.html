@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+  <html>
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Hello World!</title>
+      <link rel="stylesheet" type="text/css" href="./style.css">
+    </head>
+
+    <body>
+      <label for="eventName">Event Name:</label>
+      <input id="name" type="text" name="EventName"><br>
+      <label for="eventDesc">Event Description:</label>
+      <textarea id="desc" rows="5" cols="50"> </textarea><br>
+      <label for="eventLength">Event Length (hours):</label>
+      <input id="length" type="text" name="EventLength"><br>
+
+      <button onclick="calcFreeSpace()">Find Free Space</button>
+    </body>
+
+
+    <script>
+      function calcFreeSpace() {
+          localStorage.setItem("name",document.getElementById("name").value);
+          localStorage.setItem("desc",document.getElementById("desc").value);
+          //localStorage.setItem("time",document.getElementById("time").value);
+          localStorage.setItem("length",document.getElementById("length").value);
+          const {getCurrentWindow} = require('electron').remote;
+          getCurrentWindow().hide();
+      }
+    </script>
+
+
+
+
+
+
+
+  </html>
