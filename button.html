@@ -15,11 +15,20 @@
       <label for="eventLength">Event Length (hours):</label>
       <input id="length" type="text" name="EventLength"><br>
 
-      <button onclick="calcFreeSpace()">Find Free Space</button>
+      <button id= "send" onclick="calcFreeSpace()">Find Free Space</button>
     </body>
 
 
     <script>
+      
+      window.addEventListener("keyup", function(event){
+        if(event.keyCode == 13){
+          document.getElementById("send").click();
+        }
+        if(event.keyCode == 27){
+          getCurrentWindow().hide();
+        }
+      })
       function calcFreeSpace() {
           localStorage.setItem("name",document.getElementById("name").value);
           localStorage.setItem("desc",document.getElementById("desc").value);

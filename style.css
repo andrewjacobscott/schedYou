@@ -82,6 +82,15 @@ label{
   display: block;
   width: 1000px;
 }
+
+/*class used to fill cell for appointments */
+.fill{
+    background-color: red;
+}
+
+.remove{
+    background-color: initial;
+}
 /*
 
 tbody{
