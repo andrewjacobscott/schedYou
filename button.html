@@ -9,32 +9,44 @@
 
     <body>
       <label for="eventName">Event Name:</label>
-      <input id="name" type="text" name="EventName"><br>
+      <input id="name" type="text" name="EventName" value=""><br>
       <label for="eventDesc">Event Description:</label>
       <textarea id="desc" rows="5" cols="50"> </textarea><br>
       <label for="eventLength">Event Length (hours):</label>
-      <input id="length" type="text" name="EventLength"><br>
+      <input id="length" type="text" name="EventLength" value=""><br>
+      <p id="message"></p>
 
       <button id= "send" onclick="calcFreeSpace()">Find Free Space</button>
+      <button onclick="window.close()"> Cancel</button>
     </body>
 
 
     <script>
-      
+      const {getCurrentWindow} = require('electron').remote;
       window.addEventListener("keyup", function(event){
         if(event.keyCode == 13){
           document.getElementById("send").click();
+          return;
         }
         if(event.keyCode == 27){
-          getCurrentWindow().hide();
+          getCurrentWindow().close();
+          
         }
-      })
+      });
+
       function calcFreeSpace() {
-          localStorage.setItem("name",document.getElementById("name").value);
-          localStorage.setItem("desc",document.getElementById("desc").value);
+          var eName = document.getElementById("name").value;
+          var eDesc = document.getElementById("desc").value;
+          var eLength = document.getElementById("length").value;
+          if(eName === "" || eLength === ""){
+            document.getElementById("message").innerHTML = "Missing event name or length\nclick cancel to exit"
+            return;
+          }
+          localStorage.setItem("name",eName);
+          localStorage.setItem("desc", eDesc);
           //localStorage.setItem("time",document.getElementById("time").value);
-          localStorage.setItem("length",document.getElementById("length").value);
-          const {getCurrentWindow} = require('electron').remote;
+          localStorage.setItem("length", eLength);
+          
           getCurrentWindow().hide();
       }
     </script>
