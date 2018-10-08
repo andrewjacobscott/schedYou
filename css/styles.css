@@ -99,6 +99,10 @@ position: relative;
   padding-right: 25px;
 }
 
+.monday{
+  background-color: #efefef;
+}
+
 /*
 body{
   font-family: 'Roboto', sans-serif;
