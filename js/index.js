@@ -15,13 +15,14 @@
   var getHours = require('date-fns/get_hours');
   var getMinutes = require('date-fns/get_minutes');
   var minDiff = require('date-fns/difference_in_minutes');
-  const {app, BrowserWindow, getCurrentWindow } = require('electron').remote;
   var eventArr = [];
   var firstDayOfWeek;
   var lastDayOfWeek;
   var eventID = 0; // want to load this value
   // Adjust this number depending on table entry representation
   const TIMEBLOCKSIZE = 60;
+  var exports = module.exports = {};
+  var fs = require('fs');
 
   function startHeader() {
     firstDayOfWeek = startOfWeek(startOfToday());
@@ -137,6 +138,7 @@
   }
   // Handles button pressing
   function newEvent(){
+      const {BrowserWindow} = require('electron').remote;
       newWindow = new BrowserWindow({width: 1000, height: 600});
       newWindow.loadFile('assets/button.html');
 
@@ -154,7 +156,8 @@
           eID: localStorage.getItem("eventID")
         };
         eventArr.push(eventObj);
-
+        saveEvents();
+        
         //console.log(localStorage.getItem("startDate") + 'T' +localStorage.getItem("start"));
         var length = minDiff(eventObj.eEndDate, eventObj.eStartDate);
 
@@ -304,3 +307,38 @@ function removeEventFromCalender(start, event){
 
   }
 }
+
+function loadEvents(){
+  var fs = require('fs');
+  var obj;
+  fs.readFile('data.json', 'utf8', function readFileCallback(err, data){
+    if (err){
+        console.log(err);
+    } else {
+      try{
+        obj = JSON.parse(data); //now it an object
+        for (x in obj) {
+          eventArr.push(obj[x]);
+          addEventToCalendar(obj[x]);
+        }
+    }catch{
+      console.log("Nothing to load!");
+    }    
+  }});
+  
+}
+
+function saveEvents(){
+  fs.truncate('data.json', 0, function(){console.log('done clearing file')});
+  var json = JSON.stringify(eventArr);
+  fs.writeFile('data.json', json, function(err){
+    if(err) throw err;
+    console.log("saved");
+  }); 
+}
+
+//clear saved data
+function clearData(){
+  fs.truncate('data.json', 0, function(){console.log('done clearing file')});
+}
+
