@@ -1,4 +1,4 @@
-<script>
+
 
   const {app, BrowserWindow, getCurrentWindow } = require('electron').remote;
 
@@ -102,4 +102,4 @@
 
     }
   }
-</script>
+
