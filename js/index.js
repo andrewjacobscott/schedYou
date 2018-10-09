@@ -14,6 +14,7 @@
   var getHours = require('date-fns/get_hours');
   var getMinutes = require('date-fns/get_minutes');
   var minDiff = require('date-fns/difference_in_minutes');
+  //const buttonModule = require('../assets/button.html');
   const {app, BrowserWindow, getCurrentWindow } = require('electron').remote;
   var eventArr = [];
   var firstDayOfWeek;
@@ -21,6 +22,48 @@
   var eventID = 0; // want to load this value
   // Adjust this number depending on table entry representation
   const TIMEBLOCKSIZE = 60;
+
+  document.addEventListener("click", function(e) {
+    var target = e.target;
+    console.dir(target);
+    if (target.nodeName === "DIV" && target.className === "event") {
+        editEvent(target.firstElementChild.innerText);
+        console.dir(target.parentNode);
+    }
+  });
+  function editEvent(eventID) {
+    newWindow = new BrowserWindow({width: 1000, height: 600});
+    newWindow.loadFile('assets/button.html');
+
+    let eName;
+    let eDesc;
+    let time;
+    let eventObj;
+    var i;
+    for (i = 0; i < eventArr.length; i++) {
+      console.dir(eventArr);
+      console.log(eventID);
+      if (eventID == eventArr[i].eID) {
+        eventObj = eventArr[i];
+        break;
+      }
+    }
+    console.dir(eventObj);
+    localStorage.setItem("eventID", JSON.stringify(eventObj));
+    eventArr.remove(eventObj);
+  }
+
+    /*
+    newWindow.on('hide', () => {
+      eventObj = {
+        eName:  localStorage.getItem("name"),
+        eDesc:  localStorage.getItem("desc"),
+        //eLength:  localStorage.getItem("length")
+        eStartDate: parse(localStorage.getItem("startDate") + 'T' +localStorage.getItem("start")),
+        eEndDate: parse(localStorage.getItem("endDate") + 'T' + localStorage.getItem("end")),
+        eID: localStorage.getItem("eventID")
+      };
+      */
 
   function startHeader() {
     firstDayOfWeek = startOfWeek(startOfToday());
@@ -201,17 +244,29 @@
     var tab = document.getElementById('myTable');
     var heightBox = diff * 98;
     var eventBlock;
+    var found = false;
     for(i=startPoint; i < startPoint+Math.floor((length/TIMEBLOCKSIZE)); i++) {
-      tab.rows[i].cells[column].textContent = eventObj.eName;
-      tab.rows[i].cells[column].innerHTML = `<div class="event" title=` + eventObj.eName + ` data-index=""
-      style="height:`+heightBox+`px">
-      <div class="start-time"><strong>` + getHours(eventObj.eStartDate) + ":" + startMins + `</strong></div>
-      <div class="description">` + eventObj.eDesc+ `</div>
-      <div class="end-time"><strong>` + getHours(eventObj.eEndDate) + ":" + endMins + `</strong></div>
-      </div>`;
+      if (!found) {
+        console.dir(tab.rows[i].cells[column]);
+        tab.rows[i].cells[column].textContent = eventObj.eName;
+        tab.rows[i].cells[column].innerHTML = `<div class="event" title=` + eventObj.eName + ` data-index=""
+        style="height:`+heightBox+`px" nodeValue=` + eventObj.eID + `>
+        <p class="hidden">`+eventObj.eID+`</p>
+        <div class="start-time"><strong>` + getHours(eventObj.eStartDate) + ":" + startMins + `</strong></div>
+        <div class="description">` + eventObj.eDesc+ `</div>
+        <div class="end-time"><strong>` + getHours(eventObj.eEndDate) + ":" + endMins + `</strong></div>
+        </div>`;
 
+        tab.rows[i].cells[column].id = "definer";
+        tab.rows[i].cells[column].value = eventObj.eID;
+        console.dir(tab.rows[i].cells[column]);
+        found = true;
+      }
+      else {
+        tab.rows[i].cells[column].id = "covered";
+      }
       //eventBlock.id = "";
-      break;
+      //break;
       //tab.rows[i].cells[column].className = "fill";
     }
 

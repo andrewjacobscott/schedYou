@@ -101,6 +101,10 @@ position: relative;
   padding-right: 25px;
 }
 
+.hidden {
+  display:none;
+}
+
 /*
 .monday{
   background-color: #efefef;
