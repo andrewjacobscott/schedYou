@@ -34,6 +34,10 @@
         </li>
       </ul>
       <form class="form-inline my-2 my-lg-0">
+          <div class="btn-group" role="group" aria-label="Basic example" style="padding-right: 1em;">
+              <button type="button" class="btn btn-secondary" style="margin-right: 0.3em;"><</button>
+              <button type="button" class="btn btn-secondary">></button>
+          </div>
         <button onclick="newEvent()" type="button" class="btn btn-info">+</button>
       </form>
     </div>
@@ -47,9 +51,7 @@
           <thead>
           <tr class="day">
             <th class="col-xs-2">
-              <div class="day-of-week">
-              </div>
-              <div class="date"></div>
+              <div class="month" style="color: blue;"><h3>October</h3></div>
             </th>
             <th class="col-xs-2">
               <div class="day-of-week">Sunday</div>
@@ -64,7 +66,7 @@
               <div class="date">3</div>
             </th>
             <th class="col-xs-2">
-              <div class="day-of-week">Wedsneday</div>
+              <div class="day-of-week">Wednesday</div>
               <div class="date">4</div>
             </th>
             <th class="col-xs-2">
