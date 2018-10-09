@@ -2,8 +2,8 @@
   <html>
     <head>
       <meta charset="utf-8">
-      <link rel="stylesheet" type="text/css" href="css/styles.css">
-      <script src="js/index.js" type="text/javascript"></script>
+      <link rel="stylesheet" type="text/css" href="../css/styles.css">
+      <script src="../js/index.js" type="text/javascript"></script>
       <link href="https://bootswatch.com/4/journal/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
       <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 
@@ -30,10 +30,6 @@
           <div class="form-group">
             <label for="desc">Event Description</label>
             <textarea class="form-control" id="desc" placeholder="Event Description" rows="5" cols="50"></textarea>
-          </div>
-          <div class="form-group">
-            <label for="eventLength">Event Length (Required)</label>
-            <input type="text" class="form-control" id="length" placeholder="How long is the event?">
           </div>
           <div class="form-group">
             <label for="eventStart">Event Start Time</label>
@@ -66,12 +62,14 @@
 
 
     <script>
-
+      /*
       $(".send").click(function(event) {
         btnMostrarSeccion($(this));
         event.preventDefault();
       })
-      const {getCurrentWindow} = require('electron').remote;
+      */
+      
+      /*
       window.addEventListener("keyup", function(event){
         if(event.keyCode == 13){
           document.getElementById("send").click();
@@ -82,8 +80,10 @@
 
         }
       });
+      */
 
       function calcFreeSpace() {
+          const {getCurrentWindow} = require('electron').remote;
           var eName = document.getElementById("name").value;
           var eDesc = document.getElementById("desc").value;
           var start = document.getElementById("start").value;

@@ -7,9 +7,11 @@
     <link href="https://bootswatch.com/4/journal/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 <script>
+  /*
       function newEvent() {
         window.open('assets/button.html');
       }
+      */
     </script>
     <title>SchedYou</title>
   </head>
@@ -41,7 +43,7 @@
 
     <div class="container">
       <div class="panel panel-default">
-        <table class="table">
+        <table class="table" id="myTable">
           <thead>
           <tr class="day">
             <th class="col-xs-2">
@@ -80,7 +82,7 @@
           </tr>
         </thead>
 
-        <tbody>
+        <tbody id="myBody">
           <tr>
           <td>12:00AM</td>
           <td class="sunday" id="sunday-12am">&nbsp;</td>

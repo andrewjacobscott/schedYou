@@ -15,13 +15,19 @@ function createWindow(){
     protocol: 'file:',
     slashes: true
   }));
-
-// Open devtools [COMMENT THIS ONE LINE OUT WHEN YOU DONT NEED DEVTOOLS OPENED AT START]
-win.webContents.openDevTools();
+  
+  // Open devtools [COMMENT THIS ONE LINE OUT WHEN YOU DONT NEED DEVTOOLS OPENED AT START]
+  /*win.webContents.openDevTools();
   win.on('closed', ()=> {
     win = null;
   })
+  */
 }
+
+
+
+
+
 
 // Run create window function
 app.on('ready', createWindow);
