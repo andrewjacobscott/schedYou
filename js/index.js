@@ -8,6 +8,7 @@
   var getDate = require('date-fns/get_date');
   var startOfDay = require('date-fns/start_of_day');
   var addDays = require('date-fns/add_days');
+  var subDays = require('date-fns/sub_days');
   var compareAsc = require('date-fns/compare_asc');
   var parse = require('date-fns/parse');
   var getHours = require('date-fns/get_hours');
@@ -29,18 +30,64 @@
   function updateHeaders(weekStart) {
     var tab = document.getElementById('myTable');
     var datePtr = weekStart;
+    /*
     console.log(tab);
     console.log(tab.rows);
+    */
     cellArray = tab.rows[0].cells;
     var i;
     for (i = 1; i < cellArray.length; i++) {
-      console.log(cellArray[i]);
+      //console.dir(cellArray[i]);
       cellArray[i].innerHTML = cellArray[i].innerHTML.trim();
-      cellArray[i].innerHTML = cellArray[i].innerHTML.substring(0,cellArray[i].innerHTML.lastIndexOf('\n')) +
-      `<div class="date">` + getDate(datePtr) + `</div>`;
+      var substr = cellArray[i].innerHTML.substring(0,cellArray[i].innerHTML.lastIndexOf('\n'));
+      if (substr.replace(/\s/g, "") != "") {
+        cellArray[i].innerHTML = substr;
+        cellArray[i].innerHTML+= `\n<div class="date">` + getDate(datePtr) + `</div>`;
+      }
+      else {
+        cellArray[i].innerHTML += `\n<div class="date">` + getDate(datePtr) + `</div>`;
+      }
+
       datePtr = addDays(datePtr,1);
+
     }
   }
+
+
+
+  function newWeek(rightOrLeft) {
+    var body = document.getElementById('myBody');
+    //console.dir(body);
+    var rows = body.rows;
+    var i,j;
+    for (i = 0; i < body.rows.length; i++) {
+      var cells = body.rows[i].cells;
+      for (j = 1; j < cells.length; j++) {
+        cells[j].innerHTML = "<td>&nbsp;</td>";
+      }
+    }
+    //body.innerHTML = "";
+    //console.log(body);
+     // if 1, forward a week.
+     // if -1, backward a week.
+     if (rightOrLeft === 1) {
+       firstDayOfWeek = addDays(firstDayOfWeek,7);
+       lastDayOfWeek = addDays(lastDayOfWeek,7);
+     }
+     else {
+       firstDayOfWeek = subDays(firstDayOfWeek,7);
+       lastDayOfWeek = subDays(lastDayOfWeek,7);
+     }
+     updateHeaders(firstDayOfWeek);
+     //console.log(eventArr);
+     var k;
+     for (k = 0; k < eventArr.length; k++) {
+       var element = eventArr[k];
+       console.log(element);
+       addEventToCalendar(element);
+     }
+  }
+
   // Handles button pressing
   function newEvent(){
       newWindow = new BrowserWindow({width: 1000, height: 600});
@@ -61,7 +108,7 @@
         };
         eventArr.push(eventObj);
 
-        console.log(localStorage.getItem("startDate") + 'T' +localStorage.getItem("start"));
+        //console.log(localStorage.getItem("startDate") + 'T' +localStorage.getItem("start"));
         var length = minDiff(eventObj.eEndDate, eventObj.eStartDate);
 
 
@@ -75,7 +122,7 @@
         console.log(eventArr);
         */
 
-        console.log("name: ", eventObj.eName, " desc: ", eventObj.eDesc);
+        //console.log("name: ", eventObj.eName, " desc: ", eventObj.eDesc);
         newWindow.close();
         newWindow = null;
         addEventToCalendar(eventObj);
@@ -132,7 +179,7 @@
     var myBody = document.getElementById('myBody');
     var startPoint = minDiff(eventObj.eStartDate, startOfDay(eventObj.eStartDate));
     var diff = length/TIMEBLOCKSIZE;
-    console.log("Difference: " + diff);
+    //console.log("Difference: " + diff);
     // 1 offset to avoid first row of table. (header)
     startPoint = Math.floor(startPoint/TIMEBLOCKSIZE) + 1; // currently minutes, swapping to hours
     //console.log("Start: " + startPoint);

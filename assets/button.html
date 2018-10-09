@@ -47,7 +47,7 @@
             <label for="eventEndDate">End Date</label>
             <input id="endDate" type="text" placeholder="YYYY-MM-DD">
           </div>
-          
+
           <small id="message" class="form-text text-muted"></small>
 
           <button type="submit" class="btn btn-info" id= "send" onclick="calcFreeSpace()">Submit</button>
@@ -57,7 +57,7 @@
     </body>
 
     <script>
-      var eventID; // = getEventID()
+      var eventID = 0; // = getEventID()
     </script>
 
 
@@ -68,7 +68,7 @@
         event.preventDefault();
       })
       */
-      
+
       /*
       window.addEventListener("keyup", function(event){
         if(event.keyCode == 13){
@@ -96,7 +96,7 @@
             return;
           }
           eventID++;
-          
+
           localStorage.setItem("name",eName);
           localStorage.setItem("desc", eDesc);
           localStorage.setItem("start", start);

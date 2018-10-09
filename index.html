@@ -35,8 +35,8 @@
       </ul>
       <form class="form-inline my-2 my-lg-0">
           <div class="btn-group" role="group" aria-label="Basic example" style="padding-right: 1em;">
-              <button type="button" class="btn btn-secondary" style="margin-right: 0.3em;"><</button>
-              <button type="button" class="btn btn-secondary">></button>
+              <button onclick="newWeek(-1)" type="button" class="btn btn-secondary" style="margin-right: 0.3em;"><</button>
+              <button onclick="newWeek(1)" type="button" class="btn btn-secondary">></button>
           </div>
         <button onclick="newEvent()" type="button" class="btn btn-info">+</button>
       </form>
@@ -89,11 +89,12 @@
           <td>12:00AM</td>
           <td class="sunday" id="sunday-12am">&nbsp;</td>
           <td class="monday">
+          <!--
             <div class="event" title="Birthday Party" data-index="">
             <div class="start-time"><strong>12AM</strong></div>
             <div class="description">Birthday Party</div>
             <div class="end-time"><strong>4AM</strong></div>
-            </div>
+          -->
           </td>
           <td class="tuesday">&nbsp;</td>
           <td class="wedsnedy">&nbsp;</td>

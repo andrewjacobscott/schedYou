@@ -50,7 +50,7 @@ tbody {
 
 /*
 thead {
-    // fallback 
+    // fallback
 }
 */
 
@@ -101,9 +101,10 @@ position: relative;
   padding-right: 25px;
 }
 
+/*
 .monday{
   background-color: #efefef;
-}
+}*/
 
 /*
 body{
@@ -294,5 +295,3 @@ tbody{
     height: 100px;
     overflow-y: scroll;
 }*/
-
-
