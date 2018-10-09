@@ -1,1162 +1,337 @@
 <!DOCTYPE html>
-  <html>
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Hello World!</title>
-      <link rel="stylesheet" type="text/css" href="./style.css">
-    </head>
-    <body id="everything">
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <script src="js/index.js" type="text/javascript"></script>
+    <link href="https://bootswatch.com/4/journal/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+<script>
+      function newEvent() {
+        window.open('assets/button.html');
+      }
+    </script>
+    <title>SchedYou</title>
+  </head>
 
-        <table id="myTable">
+      
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">SchedYou</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarColor03">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">About</a>
+        </li>
+      </ul>
+      <form class="form-inline my-2 my-lg-0">
+        <button onclick="newEvent()" type="button" class="btn btn-info">+</button>
+      </form>
+    </div>
+  </nav>
+
+
+
+    <div class="container">
+      <div class="panel panel-default">
+        <table class="table">
           <thead>
-            <tr>
-              <th></th>
-              <th>
-                <span class="day">1</span>
-                <span class="long">Monday</span>
-                <span class="short">Mon</span>
-              </th>
-              <th>
-                <span class="day">2</span>
-                <span class="long">Tuesday</span>
-                <span class="short">Tue</span>
-              </th>
-              <th>
-                <span class="day">3</span>
-                <span class="long">Wendsday</span>
-                <span class="short">We</span>
-              </th>
-              <th>
-                <span class="day">4</span>
-                <span class="long">Thursday</span>
-                <span class="short">Thur</span>
-              </th>
-              <th>
-                <span class="day active">5</span>
-                <span class="long">Friday</span>
-                <span class="short">Fri</span>
-              </th>
-              <th>
-                <span class="day">6</span>
-                <span class="long">Saturday</span>
-                <span class="short">Sat</span>
-              </th>
-              <th>
-                <span class="day">7</span>
-                <span class="long">Sunday</span>
-                <span class="short">Sun</span>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="hour" rowspan="4"><span>12:00AM</span></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td class="hour" rowspan="4"><span>1:00AM</span></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td class="hour" rowspan="4"><span>2:00AM</span></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td class="hour" rowspan="4"><span>3:00AM</span></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td class="hour" rowspan="4"><span>4:00AM</span></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td class="hour" rowspan="4"><span>5:00AM</span></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td class="hour" rowspan="4"><span>6:00AM</span></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td class="hour" rowspan="4"><span>7:00AM</span></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td class="hour" rowspan="4"><span>8:00AM</span></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td class="hour" rowspan="4"><span>9:00AM</span></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
+          <tr class="day">
+            <th class="col-xs-2">
+              <div class="day-of-week">
+              </div>
+              <div class="date"></div>
+            </th>
+            <th class="col-xs-2">
+              <div class="day-of-week">Sunday</div>
+              <div class="date">1</div>
+            </th>
+            <th class="col-xs-2">
+              <div class="day-of-week">Monday</div>
+              <div class="date">2</div>
+            </th>
+            <th class="col-xs-2">
+              <div class="day-of-week">Tuesday</div>
+              <div class="date">3</div>
+            </th>
+            <th class="col-xs-2">
+              <div class="day-of-week">Wedsneday</div>
+              <div class="date">4</div>
+            </th>
+            <th class="col-xs-2">
+              <div class="day-of-week">Thursday</div>
+              <div class="date">5</div>
+            </th>
+            <th class="col-xs-2">
+              <div class="day-of-week">Friday</div>
+              <div class="date">6</div>
+            </th>
+            <th class="col-xs-2">
+              <div class="day-of-week">Saturday</div>
+              <div class="date">7</div>
+            </th>
+          </tr>
+        </thead>
 
-            <tr>
-              <td class="hour" rowspan="4"><span>10:00AM</span></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td class="hour" rowspan="4"><span>11:00AM</span></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td class="hour" rowspan="4"><span>12:00PM</span></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td class="hour" rowspan="4"><span>1:00PM</span></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td class="hour" rowspan="4"><span>2:00PM</span></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td class="hour" rowspan="4"><span>3:00PM</span></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td class="hour" rowspan="4"><span>4:00PM</span></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td class="hour" rowspan="4"><span>5:00PM</span></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td class="hour" rowspan="4"><span>6:00PM</span></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td class="hour" rowspan="4"><span>7:00PM</span></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td class="hour" rowspan="4"><span>8:00PM</span></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td class="hour" rowspan="4"><span>9:00PM</span></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td class="hour" rowspan="4"><span>10:00PM</span></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td class="hour" rowspan="4"><span>11:00PM</span></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-          </tbody>
-        </table>
-    </body>
-
-
-    <script>
-      // Initializations
-      var startOfWeek = require('date-fns/start_of_week');
-      var endOfWeek = require('date-fns/end_of_week');
-      var startOfToday = require('date-fns/start_of_today');
-      var startOfTomorrow = require('date-fns/start_of_tomorrow');
-      var getDate = require('date-fns/get_date');
-      var compareAsc = require('date-fns/compare_asc');
-      var parse = require('date-fns/parse');
-      var minDiff = require('date-fns/difference_in_minutes');
-      const {app, BrowserWindow, getCurrentWindow } = require('electron').remote;
-      var eventArr = [];
-      var firstDayOfWeek = startOfWeek(startOfToday());
-      var lastDayOfWeek = endOfWeek(startOfToday());
-      // Adjust this number depending on table entry representation
-      const TIMEBLOCKSIZE = 60; 
-
-    </script>
+        <tbody>
+          <tr>
+          <td>12:00AM</td>
+          <td class="sunday" id="sunday-12am">&nbsp;</td>
+          <td class="monday">
+            <div class="event" title="Birthday Party" data-index="">
+            <div class="start-time"><strong>12AM</strong></div>
+            <div class="description">Birthday Party</div>
+            <div class="end-time"><strong>4AM</strong></div>
+            </div>
+          </td>
+          <td class="tuesday">&nbsp;</td>
+          <td class="wedsnedy">&nbsp;</td>
+          <td class="thrusday">&nbsp;</td>
+          <td class="friday">&nbsp;</td>
+          <td class="saturday">&nbsp;</td>
+          </tr>
+          <tr>
+            <td>1:00AM</td>
+            <td class="sunday">&nbsp;</td>
+            <td class="monday">&nbsp;</td>
+            <td class="tuesday">&nbsp;</td>
+            <td class="wedsnedy">&nbsp;</td>
+            <td class="thrusday">&nbsp;</td>
+            <td class="friday">&nbsp;</td>
+            <td class="saturday">&nbsp;</td>
+          </tr>
+          <tr>
+            <td>2:00AM</td>
+            <td class="sunday">&nbsp;</td>
+            <td class="monday">&nbsp;</td>
+            <td class="tuesday">&nbsp;</td>
+            <td class="wedsnedy">&nbsp;</td>
+            <td class="thrusday">&nbsp;</td>
+            <td class="friday">&nbsp;</td>
+            <td class="saturday">&nbsp;</td>
+          </tr>
+          <tr>
+            <td>3:00AM</td>
+            <td class="sunday">&nbsp;</td>
+            <td class="monday">&nbsp;</td>
+            <td class="tuesday">&nbsp;</td>
+            <td class="wedsnedy">&nbsp;</td>
+            <td class="thrusday">&nbsp;</td>
+            <td class="friday">&nbsp;</td>
+            <td class="saturday">&nbsp;</td>
+          </tr>
+          <tr>
+            <td>4:00AM</td>
+            <td class="sunday">&nbsp;</td>
+            <td class="monday">&nbsp;</td>
+            <td class="tuesday">&nbsp;</td>
+            <td class="wedsnedy">&nbsp;</td>
+            <td class="thrusday">&nbsp;</td>
+            <td class="friday">&nbsp;</td>
+            <td class="saturday">&nbsp;</td>
+          </tr>
+          <tr>
+            <td>5:00AM</td>
+            <td class="sunday">&nbsp;</td>
+            <td class="monday">&nbsp;</td>
+            <td class="tuesday">&nbsp;</td>
+            <td class="wedsnedy">&nbsp;</td>
+            <td class="thrusday">&nbsp;</td>
+            <td class="friday">&nbsp;</td>
+            <td class="saturday">&nbsp;</td>
+          </tr>
+          <tr>
+            <td>6:00AM</td>
+            <td class="sunday">&nbsp;</td>
+            <td class="monday">&nbsp;</td>
+            <td class="tuesday">&nbsp;</td>
+            <td class="wedsnedy">&nbsp;</td>
+            <td class="thrusday">&nbsp;</td>
+            <td class="friday">&nbsp;</td>
+            <td class="saturday">&nbsp;</td>
+          </tr>
+          <tr>
+            <td>7:00AM</td>
+            <td class="sunday">&nbsp;</td>
+            <td class="monday">&nbsp;</td>
+            <td class="tuesday">&nbsp;</td>
+            <td class="wedsnedy">&nbsp;</td>
+            <td class="thrusday">&nbsp;</td>
+            <td class="friday">&nbsp;</td>
+            <td class="saturday">&nbsp;</td>
+          </tr>
+          <tr>
+            <td>8:00AM</td>
+            <td class="sunday">&nbsp;</td>
+            <td class="monday">&nbsp;</td>
+            <td class="tuesday">&nbsp;</td>
+            <td class="wedsnedy">&nbsp;</td>
+            <td class="thrusday">&nbsp;</td>
+            <td class="friday">&nbsp;</td>
+            <td class="saturday">&nbsp;</td>
+          </tr>
+          <tr>
+            <td>9:00AM</td>
+            <td class="sunday">&nbsp;</td>
+            <td class="monday">&nbsp;</td>
+            <td class="tuesday">&nbsp;</td>
+            <td class="wedsnedy">&nbsp;</td>
+            <td class="thrusday">&nbsp;</td>
+            <td class="friday">&nbsp;</td>
+            <td class="saturday">&nbsp;</td>
+          </tr>
+          <tr>
+            <td>10:00AM</td>
+            <td class="sunday">&nbsp;</td>
+            <td class="monday">&nbsp;</td>
+            <td class="tuesday">&nbsp;</td>
+            <td class="wedsnedy">&nbsp;</td>
+            <td class="thrusday">&nbsp;</td>
+            <td class="friday">&nbsp;</td>
+            <td class="saturday">&nbsp;</td>
+          </tr>
+          <tr>
+            <td>11:00AM</td>
+            <td class="sunday">&nbsp;</td>
+            <td class="monday">&nbsp;</td>
+            <td class="tuesday">&nbsp;</td>
+            <td class="wedsnedy">&nbsp;</td>
+            <td class="thrusday">&nbsp;</td>
+            <td class="friday">&nbsp;</td>
+            <td class="saturday">&nbsp;</td>
+          </tr>
+          <tr>
+            <td>12:00PM</td>
+            <td class="sunday">&nbsp;</td>
+            <td class="monday">&nbsp;</td>
+            <td class="tuesday">&nbsp;</td>
+            <td class="wedsnedy">&nbsp;</td>
+            <td class="thrusday">&nbsp;</td>
+            <td class="friday">&nbsp;</td>
+            <td class="saturday">&nbsp;</td>
+          </tr>
+          <tr>
+            <td>1:00PM</td>
+            <td class="sunday">&nbsp;</td>
+            <td class="monday">&nbsp;</td>
+            <td class="tuesday">&nbsp;</td>
+            <td class="wedsnedy">&nbsp;</td>
+            <td class="thrusday">&nbsp;</td>
+            <td class="friday">&nbsp;</td>
+            <td class="saturday">&nbsp;</td>
+          </tr>
+          <tr>
+            <td>2:00PM</td>
+            <td class="sunday">&nbsp;</td>
+            <td class="monday">&nbsp;</td>
+            <td class="tuesday">&nbsp;</td>
+            <td class="wedsnedy">&nbsp;</td>
+            <td class="thrusday">&nbsp;</td>
+            <td class="friday">&nbsp;</td>
+            <td class="saturday">&nbsp;</td>
+          </tr>
+          <tr>
+            <td>3:00PM</td>
+            <td class="sunday">&nbsp;</td>
+            <td class="monday">&nbsp;</td>
+            <td class="tuesday">&nbsp;</td>
+            <td class="wedsnedy">&nbsp;</td>
+            <td class="thrusday">&nbsp;</td>
+            <td class="friday">&nbsp;</td>
+            <td class="saturday">&nbsp;</td>
+          </tr>
+          <tr>
+            <td>4:00PM</td>
+            <td class="sunday">&nbsp;</td>
+            <td class="monday">&nbsp;</td>
+            <td class="tuesday">&nbsp;</td>
+            <td class="wedsnedy">&nbsp;</td>
+            <td class="thrusday">&nbsp;</td>
+            <td class="friday">&nbsp;</td>
+            <td class="saturday">&nbsp;</td>
+          </tr>
+          <tr>
+            <td>5:00PM</td>
+            <td class="sunday">&nbsp;</td>
+            <td class="monday">&nbsp;</td>
+            <td class="tuesday">&nbsp;</td>
+            <td class="wedsnedy">&nbsp;</td>
+            <td class="thrusday">&nbsp;</td>
+            <td class="friday">&nbsp;</td>
+            <td class="saturday">&nbsp;</td>
+          </tr>
+          <tr>
+            <td>6:00PM</td>
+            <td class="sunday">&nbsp;</td>
+            <td class="monday">&nbsp;</td>
+            <td class="tuesday">&nbsp;</td>
+            <td class="wedsnedy">&nbsp;</td>
+            <td class="thrusday">&nbsp;</td>
+            <td class="friday">&nbsp;</td>
+            <td class="saturday">&nbsp;</td>
+          </tr>
+          <tr>
+            <td>7:00PM</td>
+            <td class="sunday">&nbsp;</td>
+            <td class="monday">&nbsp;</td>
+            <td class="tuesday">&nbsp;</td>
+            <td class="wedsnedy">&nbsp;</td>
+            <td class="thrusday">&nbsp;</td>
+            <td class="friday">&nbsp;</td>
+            <td class="saturday">&nbsp;</td>
+          </tr>
+          <tr>
+            <td>8:00PM</td>
+            <td class="sunday">&nbsp;</td>
+            <td class="monday">&nbsp;</td>
+            <td class="tuesday">&nbsp;</td>
+            <td class="wedsnedy">&nbsp;</td>
+            <td class="thrusday">&nbsp;</td>
+            <td class="friday">&nbsp;</td>
+            <td class="saturday">&nbsp;</td>
+          </tr>
+          <tr>
+            <td>9:00PM</td>
+            <td class="sunday">&nbsp;</td>
+            <td class="monday">&nbsp;</td>
+            <td class="tuesday">&nbsp;</td>
+            <td class="wedsnedy">&nbsp;</td>
+            <td class="thrusday">&nbsp;</td>
+            <td class="friday">&nbsp;</td>
+            <td class="saturday">&nbsp;</td>
+          </tr>
+          <tr>
+            <td>10:00PM</td>
+            <td class="sunday">&nbsp;</td>
+            <td class="monday">&nbsp;</td>
+            <td class="tuesday">&nbsp;</td>
+            <td class="wedsnedy">&nbsp;</td>
+            <td class="thrusday">&nbsp;</td>
+            <td class="friday">&nbsp;</td>
+            <td class="saturday">&nbsp;</td>
+          </tr>
+          <tr>
+            <td>11:00PM</td>
+            <td class="sunday">&nbsp;</td>
+            <td class="monday">&nbsp;</td>
+            <td class="tuesday">&nbsp;</td>
+            <td class="wedsnedy">&nbsp;</td>
+            <td class="thrusday">&nbsp;</td>
+            <td class="friday">&nbsp;</td>
+            <td class="saturday">&nbsp;</td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
 
 
 
-    <script>
-      // Handles button pressing
-      oldWindow = getCurrentWindow();
-      document.getElementById('myTable').addEventListener("click", function(e) {
-          var x = e.target;
-          if(x.nodeName === "TD" && x.className != "hour" && x.textContent == "") {
-            newWindow = new BrowserWindow({width: 1000, height: 600});
-            newWindow.loadFile('button.html');
-            /*
-            x.textContent = "Hello";
-            */
-            console.log("List item ", e.target.textContent, " was clicked!");
-            let eName;
-            let eDesc;
-            let time;
-            let eventObj;
-            newWindow.on('hide', () => {
-              eventObj = {
-                eName:  localStorage.getItem("name"),
-                eDesc:  localStorage.getItem("desc"),
-                //eLength:  localStorage.getItem("length")
-                eStartDate: parse(localStorage.getItem("startDate") + 'T' +localStorage.getItem("start")),
-                eEndDate: parse(localStorage.getItem("endDate") + 'T' + localStorage.getItem("end")),
-                eID: localStorage.getItem("eventID")
-              };
-              eventArr.push(eventObj);
-              console.log(eventObj.eStartDate);
-              console.log(eventObj.eEndDate);
-
-              var length = minDiff(eventObj.eEndDate, eventObj.eStartDate);
-              
-              var test = JSON.stringify(eventObj.eStartDate);
-              var testObj = JSON.parse(test);
-              console.log(test);
-              console.log(testObj);
-              console.log(eventArr);
-              
-             console.log(length);
-
-              console.log("name: ", eventObj.eName, " desc: ", eventObj.eDesc);
-              newWindow.close();
-              newWindow = null;
-              addEventToCalendar(x,length, eventObj.eName, eventObj.eDesc);
-            })
-
-
-          }else{
-            removeEventFromCalender(x,e);
-          }
-
-      });
-      // Compare the two dates and return 1 if the first 
-      // date is after the second, -1 if the first date 
-      // is before the second or 0 if dates are equal.
-      function isEventInCalendar(eventObj) {
-        if (compareAsc(eventObj.eStartDate, firstDayOfWeek) < 0
-            || compareAsc(eventObj.eStartDate, lastDayOfWeek) > 0) {
-            // leave off end checks to allow starting in the week to be ended
-            //|| compareAsc(eventObj.eEndDate, firstDayOfWeek) < 0
-            //|| compareAsc(eventObj.eEndDate, lastDayOfWeek) > 0) {
-            return false;
-        }
-        else {
-          return true;
-        }
-      }
-      /*
-      Can sort dates with this function.
-      var result = [
-        new Date(1995, 6, 2),
-        new Date(1987, 1, 11),
-        new Date(1989, 6, 10)
-      ].sort(compareAsc)
-      */
-
-      function findEventInCalendar(eventObj) {
-        if (isEventInCalendar(eventObj)) {
-          var index;
-          var datePtr = firstDayOfWeek;
-          for ( i = 0; i < 7; i++) {
-            if (isSameDay(eventObj, datePtr)) {
-              return i; // index in day of week (0 is sunday,1 monday etc.)
-            }
-            else {
-              datePtr = startOfTomorrow(datePtr);
-            }
-          }
-          console.log("something went wrong, in calendar but not found");
-        }
-        return -1; // not in calendar
-      }
-
-      function addEventToCalendar(eventObj) {
-        var dayFound = findEventInCalendar(eventObj);
-        if (dayFound === -1) {
-          return;
-        }
-        var length = minDiff(eventObj.eEndDate, eventObj.eStartDate);
-        var myTable = document.getElementById('myTable');
-        var startPoint = minDiff(eventObj.eStartDate, startOfToday(eventObj.eStartDate));
-        startPoint = startPoint/TIMEBLOCKSIZE + 1; // currently minutes, swapping to 1/4 hours
-        // Adjust
-        for(i=startPoint; i < startPoint+(length/TIMEBLOCKSIZE); i++) {
-          cells = myTable.rows[i].cells;
-          if (cells[0].className == "hour") {
-            cells[col+1].innerHTML = name;
-            cells[col+1].className = "fill";
-          }
-          else {
-            cells[col].innerHTML = name;
-            cells[col].className = "fill";
-          }
-
-        }
-      }
-/*
-      function addEventToCalendar(start,length, name, desc) {
-        console.log(name);
-        var i,j,k;
-        var row;
-        var col;
-        var found = false;
-        var myTable = document.getElementById('myTable');
-        var cells;
-
-        row = start.parentNode.rowIndex;
-        //console.log(row);
-        //console.log(myTable.rows[row].cells.length);
-        if (myTable.rows[row].cells.length == 8) {
-          col = start.cellIndex-1;
-        }
-        else {
-          col = start.cellIndex;
-        }
-
-
-        for(i=row; i < row+(length/15); i++) {
-          cells = myTable.rows[i].cells;
-          if (cells[0].className == "hour") {
-            cells[col+1].innerHTML = name;
-            cells[col+1].className = "fill";
-          }
-          else {
-            cells[col].innerHTML = name;
-            cells[col].className = "fill";
-          }
-
-        }
-      }
-
-      function removeEventFromCalender(start, event){
-        var i,j, k, rows, col, cells;
-        var name;
-        var found = false;
-        
-        var tab = document.querySelector('table');
-        var rowsArray;
-
-        rows = document.querySelectorAll('tr');
-        rowsArray = Array.from(rows);
-
-        const rowIndex = rowsArray.findIndex(row => row.contains(event.target));
-        const columns = Array.from(rowsArray[rowIndex].querySelectorAll('td'));
-        const columnIndex = columns.findIndex(column => column == event.target);
-        console.log(rowIndex, columnIndex)
-
-        name = tab.rows[rowIndex].cells[columnIndex].textContent
-        
-        console.log("Name: " + name);
-        var currentCell = name;
-        i = rowIndex;
-        j = columnIndex;
-        while(currentCell === name){
-          tab.rows[i].cells[j].className = "remove";
-          tab.rows[i].cells[j].textContent = "";
-          j = columnIndex;
-          i++;
-          currentCell = tab.rows[i].cells[j].textContent;
-          console.log(currentCell);
-          //check right column
-          if(currentCell != name) {
-            j = columnIndex + 1;
-            currentCell = tab.rows[i].cells[j].textContent;
-          }
-          //check left column
-          if(currentCell != name) {
-            j = columnIndex - 1;
-            currentCell = tab.rows[i].cells[j].textContent;
-          }
-          
-        }
-      }
-      */
-    </script>
-  </html>
+    </div>
+</html>

@@ -1,0 +1,298 @@
+body{
+  height: 600px;
+}
+
+.container{
+  height: 100%;
+  max-width: 100%;
+  min-width: 100%;
+}
+
+.panel{
+  height: 100%;
+}
+table {
+        width: 100%;
+        height: 100%
+    }
+
+thead, tbody, tr, td, th { display: block; }
+
+thead, tr{
+  width: 100%;
+}
+
+table td{
+  height: 100px;
+}
+
+.day{
+  width: 100%;
+}
+
+tr:after {
+    content: ' ';
+    display: block;
+    visibility: hidden;
+    clear: both;
+}
+
+thead th {
+    height: 60px;
+    width: 12.5%;
+    /*text-align: left;*/
+}
+
+tbody {
+    height: 100%;
+    overflow-y: auto;
+}
+
+/*
+thead {
+    // fallback 
+}
+*/
+
+
+tbody td, thead th {
+    width: 12.5%;
+    float: left;
+}
+
+td button{
+  width: 100%;
+  height: 100%;
+}
+
+.table td {
+  border-bottom: 1px solid #dee2e6;
+  border-right: 1px solid #dee2e6;
+  border-top: hidden !important; /*override*/
+}
+
+
+.event {
+border: 1px solid #b2dba1;
+background-image: linear-gradient(to bottom, #dff0d8 0px, #c8e5bc 100%);
+background-repeat: repeat-x;
+color: #3c763d;
+border-width: 1px;
+border-radius: 5px;
+font-size: 0.75em;
+padding: 0 0.75em;
+line-height: 2em;
+/* white-space: nowrap; */
+overflow: hidden;
+text-overflow: ellipsis;
+margin-bottom: 1px;
+height: 380px;
+word-wrap: break-word;
+position: relative;
+
+}
+
+.event .end-time{
+  position: absolute;
+      bottom: 0px;
+}
+
+.navbar-brand{
+  padding-right: 25px;
+}
+
+.monday{
+  background-color: #efefef;
+}
+
+/*
+body{
+  font-family: 'Roboto', sans-serif;
+    background-color: grey;
+}
+
+
+
+.header{
+  background-color: white;
+  font-size: 1em;
+  width:100%;
+  height:60px;
+  position:absolute;
+  top:0;
+  left:0;
+}
+
+.header table{
+  margin: auto;
+  width: 100%;
+  color: black;
+  height: 100%;
+  border-collapse: collapse;
+
+}
+.header table td {
+  height: 60px;
+  border: 1px solid black;
+  margin: auto;
+  background-color: white;
+  text-align: center;
+  width: 12.5%;
+}
+
+.time-slot{
+  color: red;
+}
+
+
+
+.filler{
+  display: inline-block;
+  width: 87.5%;
+  height: 60px;
+  background: pink;
+  position: absolute;
+  top: 63px;
+  left: 12.5%;
+  border-collapse: collapse;
+
+}
+
+.filler tr{
+  display: inline-block;
+  height: 60px;
+  background: pink;
+  width: 12.4%;
+}
+.filler td{
+  border: 1px solid black;
+
+  display: inline-block;
+  width: 100%;
+
+}
+ */
+
+
+
+/*d
+
+tbody{
+    display: block;
+    height: 100px;
+    overflow-y: scroll;
+}*/
+
+
+
+
+
+
+
+
+
+
+
+
+/* body{
+    background-color: gray;
+}
+
+table, thead, tr, th, td, tbody{
+    font-family: sans-serif;
+    width: 100%;
+    border-spacing: 0;
+    border-collapse: separate;
+    table-layout: fixed;
+    margin-bottom: 50px;
+}
+
+thead, tr, th{
+    background: #626E7E;
+    color: #a9b1bc;
+    padding: 0.5em;
+    overflow: hidden;
+}
+th:first-child{
+    border-radius:3px 0 0 0;
+}
+th:last-child{
+    border-radius:0 3px  0 0;
+}
+.day{
+    display: block;
+    font-size: 1.2em;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    margin: 0 auto 5px;
+    padding: 5px;
+    line-height: 1.8;
+}
+.day:active{
+    background: #a9b1bc;
+    color: #626E7E;
+}
+.short{
+    display: none;
+}
+i{
+    vertical-align: middle;
+    font-size: 2em;
+}
+
+tbody, tr{
+    background: #a9b1bc;
+    color: #990000
+}
+
+tr:nth-child(odd){
+    background: #d4d8de;
+}
+
+td{
+    text-align: center;
+    vertical-align: middle;
+    border-left: 1px solid #626E7E;
+    position: relative;
+    height: 32px;
+    cursor: pointer;
+}
+
+
+.hour{
+    font-size: 2em;
+    padding: 0;
+    color: #626E7E;
+    background:#fff;
+    border-bottom:1px solid #626E7E;
+    border-collapse: separate;
+    min-width: 100px;
+    cursor: default;
+}
+.hour:span{
+    display: block;
+}
+
+label{
+  display: block;
+  width: 1000px;
+}
+
+/*class used to fill cell for appointments */
+.fill{
+    background-color: red;
+}
+
+.remove{
+    background-color: initial;
+}
+/*
+
+tbody{
+    display: block;
+    height: 100px;
+    overflow-y: scroll;
+}*/
+
+

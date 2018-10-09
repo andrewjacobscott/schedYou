@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+  <html>
+    <head>
+      <meta charset="utf-8">
+      <link rel="stylesheet" type="text/css" href="css/styles.css">
+      <script src="js/index.js" type="text/javascript"></script>
+      <link href="https://bootswatch.com/4/journal/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+      <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
+      <script>
+        function newEvent() {
+          window.open('assets/button.html');
+        }
+      </script>
+      <title>SchedYou</title>
+    </head>
+
+    <body>
+
+
+
+
+
+      <div class="container">
+        <form>
+          <div class="form-group">
+            <label for="name">Event title (Required)</label>
+            <input type="text" class="form-control" id="name" placeholder="Event Title">
+          </div>
+          <div class="form-group">
+            <label for="desc">Event Description</label>
+            <textarea class="form-control" id="desc" placeholder="Event Description" rows="5" cols="50"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="eventLength">Event Length (Required)</label>
+            <input type="text" class="form-control" id="length" placeholder="How long is the event?">
+          </div>
+          <div class="form-group">
+            <label for="eventStart">Event Start Time</label>
+            <input id="start" type="text" placeholder="XX:XX">
+          </div>
+          <div class="form-group">
+            <label for="eventStartDate">Start Date</label>
+            <input id="startDate" type="text" placeholder="YYYY-MM-DD">
+          </div>
+          <div class="form-group">
+            <label for="eventEnd">Event End Time</label>
+            <input id="end" type="text" placeholder="XX:XX">
+          </div>
+          <div class="form-group">
+            <label for="eventEndDate">End Date</label>
+            <input id="endDate" type="text" placeholder="YYYY-MM-DD">
+          </div>
+          
+          <small id="message" class="form-text text-muted"></small>
+
+          <button type="submit" class="btn btn-info" id= "send" onclick="calcFreeSpace()">Submit</button>
+          <button class="btn btn-secondary" onclick="window.close()">Cancel</button>
+        </form>
+      </div>
+    </body>
+
+    <script>
+      var eventID; // = getEventID()
+    </script>
+
+
+    <script>
+
+      $(".send").click(function(event) {
+        btnMostrarSeccion($(this));
+        event.preventDefault();
+      })
+      const {getCurrentWindow} = require('electron').remote;
+      window.addEventListener("keyup", function(event){
+        if(event.keyCode == 13){
+          document.getElementById("send").click();
+          return;
+        }
+        if(event.keyCode == 27){
+          getCurrentWindow().close();
+
+        }
+      });
+
+      function calcFreeSpace() {
+          var eName = document.getElementById("name").value;
+          var eDesc = document.getElementById("desc").value;
+          var start = document.getElementById("start").value;
+          var startDate = document.getElementById("startDate").value;
+          var end = document.getElementById("end").value;
+          var endDate = document.getElementById("endDate").value;
+
+          if(eName === "" || start === "" || startDate === "" || end === "" ){
+            document.getElementById("message").innerHTML = "Missing event name or length\nclick cancel to exit";
+            return;
+          }
+          eventID++;
+          
+          localStorage.setItem("name",eName);
+          localStorage.setItem("desc", eDesc);
+          localStorage.setItem("start", start);
+          localStorage.setItem("startDate", startDate);
+          localStorage.setItem("end", end);
+          localStorage.setItem("endDate",endDate);
+          localStorage.setItem("eventID",eventID);
+
+          getCurrentWindow().hide();
+      }
+    </script>
+  </html>
