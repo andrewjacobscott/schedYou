@@ -15,12 +15,32 @@
   var minDiff = require('date-fns/difference_in_minutes');
   const {app, BrowserWindow, getCurrentWindow } = require('electron').remote;
   var eventArr = [];
-  var firstDayOfWeek = startOfWeek(startOfToday());
-  var lastDayOfWeek = endOfWeek(startOfToday());
+  var firstDayOfWeek;
+  var lastDayOfWeek;
   // Adjust this number depending on table entry representation
   const TIMEBLOCKSIZE = 60;
 
+  function startHeader() {
+    firstDayOfWeek = startOfWeek(startOfToday());
+    lastDayOfWeek = endOfWeek(startOfToday());
+    updateHeaders(firstDayOfWeek);
+  }
 
+  function updateHeaders(weekStart) {
+    var tab = document.getElementById('myTable');
+    var datePtr = weekStart;
+    console.log(tab);
+    console.log(tab.rows);
+    cellArray = tab.rows[0].cells;
+    var i;
+    for (i = 1; i < cellArray.length; i++) {
+      console.log(cellArray[i]);
+      cellArray[i].innerHTML = cellArray[i].innerHTML.trim();
+      cellArray[i].innerHTML = cellArray[i].innerHTML.substring(0,cellArray[i].innerHTML.lastIndexOf('\n')) +
+      `<div class="date">` + getDate(datePtr) + `</div>`;
+      datePtr = addDays(datePtr,1);
+    }
+  }
   // Handles button pressing
   function newEvent(){
       newWindow = new BrowserWindow({width: 1000, height: 600});
