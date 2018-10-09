@@ -18,7 +18,7 @@
   var firstDayOfWeek = startOfWeek(startOfToday());
   var lastDayOfWeek = endOfWeek(startOfToday());
   // Adjust this number depending on table entry representation
-  const TIMEBLOCKSIZE = 60; 
+  const TIMEBLOCKSIZE = 60;
 
 
   // Handles button pressing
@@ -40,11 +40,11 @@
           eID: localStorage.getItem("eventID")
         };
         eventArr.push(eventObj);
-        
+
         console.log(localStorage.getItem("startDate") + 'T' +localStorage.getItem("start"));
         var length = minDiff(eventObj.eEndDate, eventObj.eStartDate);
-        
-        
+
+
         var test = JSON.stringify(eventObj.eStartDate);
         var testObj = JSON.parse(test);
         /*
@@ -61,8 +61,8 @@
         addEventToCalendar(eventObj);
     });
   }
-  // Compare the two dates and return 1 if the first 
-  // date is after the second, -1 if the first date 
+  // Compare the two dates and return 1 if the first
+  // date is after the second, -1 if the first date
   // is before the second or 0 if dates are equal.
   function isEventInCalendar(eventObj) {
     if (compareAsc(eventObj.eStartDate, firstDayOfWeek) < 0
@@ -128,26 +128,25 @@
       endMins = "0" + endMins;
     }
     var tab = document.getElementById('myTable');
-    var heightBox = diff * 95;
+    var heightBox = diff * 98;
     var eventBlock;
     for(i=startPoint; i < startPoint+Math.floor((length/TIMEBLOCKSIZE)); i++) {
       tab.rows[i].cells[column].textContent = eventObj.eName;
-      tab.rows[i].cells[column].innerHTML = `<div class="event" title=` + eventObj.eName + ` data-index="" id="eventBlock">
+      tab.rows[i].cells[column].innerHTML = `<div class="event" title=` + eventObj.eName + ` data-index=""
+      style="height:`+heightBox+`px">
       <div class="start-time"><strong>` + getHours(eventObj.eStartDate) + ":" + startMins + `</strong></div>
       <div class="description">` + eventObj.eDesc+ `</div>
       <div class="end-time"><strong>` + getHours(eventObj.eEndDate) + ":" + endMins + `</strong></div>
       </div>`;
-      eventBlock = document.getElementById('eventBlock');
-      eventBlock.height = heightBox;
+
       //eventBlock.id = "";
       break;
       //tab.rows[i].cells[column].className = "fill";
     }
-    //console.log(eventBlock);
-    //console.log(eventBlock.height);
-    
+
+
   }
-  
+
 
 function removeEventFromCalender(start, event){
   var i,j, k, rows, col, cells;
