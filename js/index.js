@@ -18,6 +18,7 @@
   var eventArr = [];
   var firstDayOfWeek;
   var lastDayOfWeek;
+  var eventID = 0; // want to load this value
   // Adjust this number depending on table entry representation
   const TIMEBLOCKSIZE = 60;
 
@@ -30,8 +31,9 @@
   function updateHeaders(weekStart) {
     var tab = document.getElementById('myTable');
     var datePtr = weekStart;
+    document.getElementById('myBody').scrollTop = 800;
+    console.dir(tab);
     /*
-    console.log(tab);
     console.log(tab.rows);
     */
     cellArray = tab.rows[0].cells;
@@ -87,7 +89,9 @@
        addEventToCalendar(element);
      }
   }
-
+  function getEventID() {
+    return eventID++;
+  }
   // Handles button pressing
   function newEvent(){
       newWindow = new BrowserWindow({width: 1000, height: 600});
