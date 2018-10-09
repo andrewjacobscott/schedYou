@@ -21,6 +21,7 @@
   // Adjust this number depending on table entry representation
   const TIMEBLOCKSIZE = 60;
   var exports = module.exports = {};
+  var fs = require('fs');
 
   function startHeader() {
     firstDayOfWeek = startOfWeek(startOfToday());
@@ -285,12 +286,16 @@ function loadEvents(){
 }
 
 function saveEvents(){
-  var fs = require('fs');
   fs.truncate('data.json', 0, function(){console.log('done clearing file')});
   var json = JSON.stringify(eventArr);
   fs.writeFile('data.json', json, function(err){
     if(err) throw err;
     console.log("saved");
   }); 
+}
+
+//clear saved data
+function clearData(){
+  fs.truncate('data.json', 0, function(){console.log('done clearing file')});
 }
 
