@@ -18,9 +18,10 @@
   },
   "homepage": "https://github.com/andrewjacobscott/schedYou#readme",
   "devDependencies": {
-    "electron": "^3.0.2"
+    "electron": "^3.0.3"
   },
   "dependencies": {
+    "date-fns": "^1.29.0",
     "electron-middle-sass": "^1.0.2"
   }
 }

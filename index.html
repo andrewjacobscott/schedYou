@@ -959,7 +959,7 @@
       var firstDayOfWeek = startOfWeek(startOfToday());
       var lastDayOfWeek = endOfWeek(startOfToday());
       // Adjust this number depending on table entry representation
-      const TIMEBLOCKSIZE = 15; 
+      const TIMEBLOCKSIZE = 60; 
 
     </script>
 
@@ -1065,7 +1065,7 @@
         var length = minDiff(eventObj.eEndDate, eventObj.eStartDate);
         var myTable = document.getElementById('myTable');
         var startPoint = minDiff(eventObj.eStartDate, startOfToday(eventObj.eStartDate));
-        startPoint = startPoint/TIMEBLOCKSIZE; // currently minutes, swapping to 1/4 hours
+        startPoint = startPoint/TIMEBLOCKSIZE + 1; // currently minutes, swapping to 1/4 hours
         // Adjust
         for(i=startPoint; i < startPoint+(length/TIMEBLOCKSIZE); i++) {
           cells = myTable.rows[i].cells;
