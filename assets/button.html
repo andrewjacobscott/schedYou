@@ -23,7 +23,7 @@
 
 
       <div class="container" id="box">
-        <form>
+        <form id="form-start">
           <div class="form-group">
             <label for="name">Event title (Required)</label>
             <input type="text" class="form-control" id="name" placeholder="Event Title">
@@ -58,18 +58,46 @@
     </body>
 
     <script>
-      var eventID = getEventID(); // = getEventID()
+      var eventID; // = getEventID()
     </script>
 
 
     <script>
+      var getHours = require('date-fns/get_hours');
+      var getMinutes = require('date-fns/get_minutes');
+      var format = require('date-fns/format');
     function fillValues(eventObj) {
-      
+      var form = document.getElementById("form-start");
+      console.dir(form);
+      var i;
+      for (i = 0; i < form.children.length ; i++) {
+        if (i == 0) {
+          form.children[i].children[1].value = eventObj.eName;
+        }
+        else if(i == 1) {
+          form.children[i].children[1].value = eventObj.eDesc;
+        }
+        else if(i == 2) {
+         // form.children[i].children[1].value = getHours(eventObj.eStartDate) + ":" + startMins;
+          form.children[i].children[1].value = format(eventObj.eStartDate, 'HH:MM');
+        }
+        else if(i == 3) {
+          form.children[i].children[1].value = format(eventObj.eStartDate,'YYYY-MM-DD');
+        }
+        else if(i == 4) {
+          form.children[i].children[1].value = format(eventObj.eEndDate, 'HH:MM');
+        }
+        else if(i == 5) {
+          form.children[i].children[1].value = format(eventObj.eEndDate,'YYYY-MM-DD');
+        }
+        
+      }
     }
     var obj = JSON.parse(localStorage.getItem("eventID"));
     console.dir(obj);
-    if (obj != null) {
+    if (obj.eName != undefined) {
       fillValues(obj);
+      localStorage.setItem("eventID", "");
     }
 
 
@@ -106,7 +134,7 @@
             document.getElementById("message").innerHTML = "Missing event name or length\nclick cancel to exit";
             return;
           }
-          eventID++;
+          eventID = getEventID();
 
           localStorage.setItem("name",eName);
           localStorage.setItem("desc", eDesc);

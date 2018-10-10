@@ -32,12 +32,7 @@
     }
   });
   function editEvent(eventID) {
-    newWindow = new BrowserWindow({width: 1000, height: 600});
-    newWindow.loadFile('assets/button.html');
 
-    let eName;
-    let eDesc;
-    let time;
     let eventObj;
     var i;
     for (i = 0; i < eventArr.length; i++) {
@@ -50,7 +45,29 @@
     }
     console.dir(eventObj);
     localStorage.setItem("eventID", JSON.stringify(eventObj));
-    eventArr.remove(eventObj);
+
+    var j;
+    for (i = 0; i < eventArr.length; i++) {
+      console.dir(eventArr);
+      console.log(eventID);
+      if (eventID == eventArr[i].eID) {
+        eventArr.splice(i,1);
+        break;
+      }
+    }
+
+    newEvent();
+
+    emptyTable();
+    
+    var k;
+     for (k = 0; k < eventArr.length; k++) {
+       var element = eventArr[k];
+       console.log(element);
+       addEventToCalendar(element);
+     }
+
+    
   }
 
     /*
@@ -98,21 +115,21 @@
     }
   }
 
-
-
-  function newWeek(rightOrLeft) {
+  function emptyTable() {
     var body = document.getElementById('myBody');
     //console.dir(body);
     var rows = body.rows;
-    var i,j;
     for (i = 0; i < body.rows.length; i++) {
       var cells = body.rows[i].cells;
       for (j = 1; j < cells.length; j++) {
         cells[j].innerHTML = "<td>&nbsp;</td>";
       }
     }
-    //body.innerHTML = "";
-    //console.log(body);
+  }
+
+  function newWeek(rightOrLeft) {
+    emptyTable();
+    
      // if 1, forward a week.
      // if -1, backward a week.
      if (rightOrLeft === 1) {
@@ -140,9 +157,6 @@
       newWindow = new BrowserWindow({width: 1000, height: 600});
       newWindow.loadFile('assets/button.html');
 
-      let eName;
-      let eDesc;
-      let time;
       let eventObj;
       newWindow.on('hide', () => {
         eventObj = {
@@ -156,8 +170,6 @@
         eventArr.push(eventObj);
 
         //console.log(localStorage.getItem("startDate") + 'T' +localStorage.getItem("start"));
-        var length = minDiff(eventObj.eEndDate, eventObj.eStartDate);
-
 
         var test = JSON.stringify(eventObj.eStartDate);
         var testObj = JSON.parse(test);
