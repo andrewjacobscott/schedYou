@@ -6,6 +6,7 @@
   var startOfTomorrow = require('date-fns/start_of_tomorrow');
   var isSameDay = require('date-fns/is_same_day');
   var getDate = require('date-fns/get_date');
+  var getMonth = require('date-fns/get_month');
   var startOfDay = require('date-fns/start_of_day');
   var addDays = require('date-fns/add_days');
   var subDays = require('date-fns/sub_days');
@@ -16,17 +17,20 @@
   var minDiff = require('date-fns/difference_in_minutes');
   //const buttonModule = require('../assets/button.html');
   const {app, BrowserWindow, getCurrentWindow } = require('electron').remote;
+  var fs = require('fs');
   var eventArr = [];
+  //clearData();
   var firstDayOfWeek;
   var lastDayOfWeek;
   var isEditing=false;
-  console.log("RELOADED");
-  if (!window.eventID) {
-    window.eventID=1;
-  }
-  //var eventID; // want to load this value
+  
+  
+  var eventID=0; // want to load this value
   // Adjust this number depending on table entry representation
+  // (pixel height of table slot)
   const TIMEBLOCKSIZE = 60;
+  var exports = module.exports = {};
+  var fs = require('fs');
 
   document.addEventListener("click", function(e) {
     var target = e.target;
@@ -46,7 +50,7 @@
         break;
       }
     }
-    console.log("EID" + eventIDNo);
+    //console.log("EID" + eventIDNo);
     //console.dir(eventObj);
     localStorage.setItem("eventObj", JSON.stringify(eventObj));
     currentLength = eventArr.length;
@@ -89,6 +93,7 @@
     console.dir("ARRAY AFTER DELETE: ");
     console.dir(eventArr);
     */
+    saveEvents();
     if(!Array.isArray(eventArr) || !eventArr.length) {
       localStorage.setItem("eventsArr","empty");
     }
@@ -103,19 +108,56 @@
     lastDayOfWeek = endOfWeek(startOfToday());
     updateHeaders(firstDayOfWeek);
   }
+  
+  function getMonthAsString(month){
+	  if(month == 0){
+		  return "January";
+	  }
+	  else if(month == 1){
+		  return "February";
+	  }
+	  else if(month == 2){
+		  return "March";
+	  }
+	  else if(month == 3){
+		  return "April";
+	  }
+	  else if(month == 4){
+		  return "May";
+	  }
+	  else if(month == 5){
+		  return "June";
+	  }
+	  else if(month == 6){
+		  return "July";
+	  }
+	  else if(month == 7){
+		  return "August";
+	  }
+	  else if(month == 8){
+		  return "September";
+	  }
+	  else if(month == 9){
+		  return "October";
+	  }
+	  else if(month == 10){
+		  return "November";
+	  }
+	  else if(month == 11){
+		  return "December";
+	  }
+	  return "trash";
+  }
+	  
 
   function updateHeaders(weekStart) {
     var tab = document.getElementById('myTable');
     var datePtr = weekStart;
+	document.getElementById('month').textContent = getMonthAsString(getMonth(datePtr));
     document.getElementById('myBody').scrollTop = 800;
-    console.dir(tab);
-    /*
-    console.log(tab.rows);
-    */
     cellArray = tab.rows[0].cells;
     var i;
     for (i = 1; i < cellArray.length; i++) {
-      //console.dir(cellArray[i]);
       cellArray[i].innerHTML = cellArray[i].innerHTML.trim();
       var substr = cellArray[i].innerHTML.substring(0,cellArray[i].innerHTML.lastIndexOf('\n'));
       if (substr.replace(/\s/g, "") != "") {
@@ -166,13 +208,13 @@
      }
   }
   function getEventID() {
-    console.log("currEID" + window.eventID);
-    return window.eventID++;
+    console.log("currEID" + eventID);
+    return eventID++;
   }
   function loadArray() {
     var str = localStorage.getItem("eventsArr");
     var x = null;
-    console.dir("WHAT STRING: " + str);
+    //console.dir("WHAT STRING: " + str);
     if (str != null && str !="" && str != "empty") {
       x = JSON.parse(str);
     }
@@ -180,32 +222,34 @@
       eventArr=[];
     }
     else {
-      console.dir(x);
+      //console.dir(x);
       if (x != null ) {
-        console.dir("UPDATE ARR: ");
+        //console.dir("UPDATE ARR: ");
         eventArr=x;
       }
     }
   }
   // Handles button pressing
   function newEvent(){
+      const {BrowserWindow} = require('electron').remote;
       newWindow = new BrowserWindow({width: 1000, height: 600});
       newWindow.loadFile('assets/button.html');
 
         
       let eventObj;
       newWindow.on('hide', () => {
-        ++window.eventID;
+        ++eventID;
         eventObj = {
           eName:  localStorage.getItem("name"),
           eDesc:  localStorage.getItem("desc"),
           //eLength:  localStorage.getItem("length")
           eStartDate: parse(localStorage.getItem("startDate") + 'T' +localStorage.getItem("start")),
           eEndDate: parse(localStorage.getItem("endDate") + 'T' + localStorage.getItem("end")),
-          eID: window.eventID
+          eID: eventID
         };
         loadArray();
         eventArr.push(eventObj);
+        saveEvents();
         localStorage.setItem("eventsArr",JSON.stringify(eventArr));
         /*
         console.log(localStorage.getItem("startDate") + 'T' +localStorage.getItem("start"));
@@ -239,8 +283,8 @@
     if (isEditing) {
       newWindow.on('close', () => {
         loadArray();
-        
-        localStorage.setItem("eventsArr",null);
+        saveEvents();
+        localStorage.setItem("eventsArr",JSON.stringify(eventArr));
         isEditing=false;
         emptyTable();
 
@@ -292,6 +336,8 @@
         }
       }
       console.log("something went wrong, in calendar but not found");
+      console.dir(datePtr);
+      console.dir(eventObj);
     }
     return -1; // not in calendar
   }
@@ -351,3 +397,58 @@
 
 
   }
+
+function loadEvents(){
+  var obj;
+  fs.readFile('data.json', 'utf8', function readFileCallback(err, data){
+    if (err){
+        console.log(err);
+    } else {
+      try{
+        obj = JSON.parse(data); //now it an object
+        for (x in obj) {
+          eventArr.push(obj[x]);
+          addEventToCalendar(obj[x]);
+        }
+    }catch{
+      console.log("Nothing to load!");
+    }
+    
+  }});
+  fs.readFile('config.json','utf8', function (err,data){
+    if (err) console.log(err);
+    else {
+      try {
+        console.log(data);
+        obj = JSON.parse(data);
+        eventID=parseInt(obj);
+      }catch{
+        console.log("nothing to load");
+      }
+    }
+  });
+  //eventID = localStorage.getItem("eventIDcount");
+  
+}
+
+function saveEvents(){
+  fs.truncate('data.json', 0, function(){console.log('done clearing file')});
+  fs.truncate('config.json', 0, function(){});
+  var json = JSON.stringify(eventArr);
+  fs.writeFile('data.json', json, function(err){
+    if(err) throw err;
+    //console.log("saved");
+  });
+  console.dir(eventID);
+  fs.writeFile('config.json', JSON.stringify(eventID), function(err) {
+    if(err) throw err;
+    //console.log("savedmine");
+  });
+}
+
+//clear saved data
+function clearData(){
+  fs.truncate('data.json', 0, function(){console.log('done clearing file')});
+  fs.truncate('config.json', 0, function(){console.log('done clearing config')});
+}
+

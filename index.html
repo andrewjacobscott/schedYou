@@ -18,7 +18,7 @@
 
 
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">SchedYou</a>
+    <a class="navbar-brand" href="#" onclick="clearData()">SchedYou</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
 
       <span class="navbar-toggler-icon"></span>
@@ -51,7 +51,7 @@
           <thead>
           <tr class="day">
             <th class="col-xs-2">
-              <div class="month" style="color: blue;"><h3>October</h3></div>
+              <div class="month" id="month"style="color: blue;"><h3>October</h3></div>
             </th>
             <th class="col-xs-2">
               <div class="day-of-week">Sunday</div>
@@ -344,5 +344,6 @@
     </script>
     <script>
         startHeader();
+        loadEvents();
     </script>
 </html>
