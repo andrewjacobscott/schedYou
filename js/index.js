@@ -19,68 +19,84 @@
   var eventArr = [];
   var firstDayOfWeek;
   var lastDayOfWeek;
-  var eventID = 0; // want to load this value
+  var isEditing=false;
+  console.log("RELOADED");
+  if (!window.eventID) {
+    window.eventID=1;
+  }
+  //var eventID; // want to load this value
   // Adjust this number depending on table entry representation
   const TIMEBLOCKSIZE = 60;
 
   document.addEventListener("click", function(e) {
     var target = e.target;
-    console.dir(target);
+    //console.dir(target);
     if (target.nodeName === "DIV" && target.className === "event") {
         editEvent(target.firstElementChild.innerText);
-        console.dir(target.parentNode);
     }
   });
-  function editEvent(eventID) {
-
+  
+  function editEvent(eventIDNo) {
+    isEditing=true;
     let eventObj;
     var i;
     for (i = 0; i < eventArr.length; i++) {
-      console.dir(eventArr);
-      console.log(eventID);
-      if (eventID == eventArr[i].eID) {
+      if (eventIDNo == eventArr[i].eID) {
         eventObj = eventArr[i];
         break;
       }
     }
-    console.dir(eventObj);
-    localStorage.setItem("eventID", JSON.stringify(eventObj));
-
+    console.log("EID" + eventIDNo);
+    //console.dir(eventObj);
+    localStorage.setItem("eventObj", JSON.stringify(eventObj));
+    currentLength = eventArr.length;
     var j;
+    localStorage.setItem("eventsArr", JSON.stringify(eventArr));
+    //console.log("before event created");
+    newEvent();
+    //console.log("AFTER EVENT CREATED");
+    //eventArr = JSON.parse(localStorage.getItem("eventsArr"));
+    /*if (eventArr.length > currentLength) {
+      deleteEvent(eventIDNo);
+    }*/
+    emptyTable();
+
+    var k;
+     for (k = 0; k < eventArr.length; k++) {
+       var element = eventArr[k];
+       //console.log(element);
+       addEventToCalendar(element);
+     }
+       
+  }
+  function deleteEvent(eventIDNo) {
+    
+    if (!eventArr.length) {
+      eventArr = JSON.parse(localStorage.getItem("eventsArr"));
+    }
+    /*
+    console.dir("ARRAY BEFORE DELETE: ");
+    console.dir(eventArr);
+    */
+    //console.log(eventIDNo);
     for (i = 0; i < eventArr.length; i++) {
-      console.dir(eventArr);
-      console.log(eventID);
-      if (eventID == eventArr[i].eID) {
+      if (eventIDNo == eventArr[i].eID) {
         eventArr.splice(i,1);
         break;
       }
     }
-
-    newEvent();
-
-    emptyTable();
-    
-    var k;
-     for (k = 0; k < eventArr.length; k++) {
-       var element = eventArr[k];
-       console.log(element);
-       addEventToCalendar(element);
-     }
-
+    /*
+    console.dir("ARRAY AFTER DELETE: ");
+    console.dir(eventArr);
+    */
+    if(!Array.isArray(eventArr) || !eventArr.length) {
+      localStorage.setItem("eventsArr","empty");
+    }
+    else {
+      localStorage.setItem("eventsArr",JSON.stringify(eventArr));
+    }
     
   }
-
-    /*
-    newWindow.on('hide', () => {
-      eventObj = {
-        eName:  localStorage.getItem("name"),
-        eDesc:  localStorage.getItem("desc"),
-        //eLength:  localStorage.getItem("length")
-        eStartDate: parse(localStorage.getItem("startDate") + 'T' +localStorage.getItem("start")),
-        eEndDate: parse(localStorage.getItem("endDate") + 'T' + localStorage.getItem("end")),
-        eID: localStorage.getItem("eventID")
-      };
-      */
 
   function startHeader() {
     firstDayOfWeek = startOfWeek(startOfToday());
@@ -145,47 +161,99 @@
      var k;
      for (k = 0; k < eventArr.length; k++) {
        var element = eventArr[k];
-       console.log(element);
+       //console.log(element);
        addEventToCalendar(element);
      }
   }
   function getEventID() {
-    return eventID++;
+    console.log("currEID" + window.eventID);
+    return window.eventID++;
+  }
+  function loadArray() {
+    var str = localStorage.getItem("eventsArr");
+    var x = null;
+    console.dir("WHAT STRING: " + str);
+    if (str != null && str !="" && str != "empty") {
+      x = JSON.parse(str);
+    }
+    if (str == "empty") {
+      eventArr=[];
+    }
+    else {
+      console.dir(x);
+      if (x != null ) {
+        console.dir("UPDATE ARR: ");
+        eventArr=x;
+      }
+    }
   }
   // Handles button pressing
   function newEvent(){
       newWindow = new BrowserWindow({width: 1000, height: 600});
       newWindow.loadFile('assets/button.html');
 
+        
       let eventObj;
       newWindow.on('hide', () => {
+        ++window.eventID;
         eventObj = {
           eName:  localStorage.getItem("name"),
           eDesc:  localStorage.getItem("desc"),
           //eLength:  localStorage.getItem("length")
           eStartDate: parse(localStorage.getItem("startDate") + 'T' +localStorage.getItem("start")),
           eEndDate: parse(localStorage.getItem("endDate") + 'T' + localStorage.getItem("end")),
-          eID: localStorage.getItem("eventID")
+          eID: window.eventID
         };
+        loadArray();
         eventArr.push(eventObj);
-
-        //console.log(localStorage.getItem("startDate") + 'T' +localStorage.getItem("start"));
-
+        localStorage.setItem("eventsArr",JSON.stringify(eventArr));
+        /*
+        console.log(localStorage.getItem("startDate") + 'T' +localStorage.getItem("start"));
+        console.log(parse(localStorage.getItem("startDate") + 'T' +localStorage.getItem("start")));
         var test = JSON.stringify(eventObj.eStartDate);
         var testObj = JSON.parse(test);
-        /*
-        console.log(eventObj.eStartDate);
-        console.log(eventObj.eEndDate);
+        
+        //console.log(eventObj.eStartDate);
+        //console.log(eventObj.eEndDate);
         console.log(test);
         console.log(testObj);
-        console.log(eventArr);
+        console.dir(eventArr);
         */
 
         //console.log("name: ", eventObj.eName, " desc: ", eventObj.eDesc);
         newWindow.close();
         newWindow = null;
-        addEventToCalendar(eventObj);
+        if (!isEditing) {
+          emptyTable();
+          var k;
+          for (k = 0; k < eventArr.length; k++) {
+            var element = eventArr[k];
+            addEventToCalendar(element);
+          }
+        }
+        
+
+        
+        //addEventToCalendar(eventObj);
     });
+    if (isEditing) {
+      newWindow.on('close', () => {
+        loadArray();
+        
+        localStorage.setItem("eventsArr",null);
+        isEditing=false;
+        emptyTable();
+
+        var k;
+        for (k = 0; k < eventArr.length; k++) {
+          var element = eventArr[k];
+          //console.log(element);
+          addEventToCalendar(element);
+        }
+      });
+
+    }
+    
   }
   // Compare the two dates and return 1 if the first
   // date is after the second, -1 if the first date
@@ -254,12 +322,11 @@
       endMins = "0" + endMins;
     }
     var tab = document.getElementById('myTable');
-    var heightBox = diff * 98;
+    var heightBox = diff * 100;
     var eventBlock;
     var found = false;
     for(i=startPoint; i < startPoint+Math.floor((length/TIMEBLOCKSIZE)); i++) {
       if (!found) {
-        console.dir(tab.rows[i].cells[column]);
         tab.rows[i].cells[column].textContent = eventObj.eName;
         tab.rows[i].cells[column].innerHTML = `<div class="event" title=` + eventObj.eName + ` data-index=""
         style="height:`+heightBox+`px" nodeValue=` + eventObj.eID + `>
@@ -271,7 +338,7 @@
 
         tab.rows[i].cells[column].id = "definer";
         tab.rows[i].cells[column].value = eventObj.eID;
-        console.dir(tab.rows[i].cells[column]);
+        //console.dir(tab.rows[i].cells[column]);
         found = true;
       }
       else {
@@ -284,47 +351,3 @@
 
 
   }
-
-
-function removeEventFromCalender(start, event){
-  var i,j, k, rows, col, cells;
-  var name;
-  var found = false;
-
-  var tab = document.querySelector('table');
-  var rowsArray;
-
-  rows = document.querySelectorAll('tr');
-  rowsArray = Array.from(rows);
-
-  const rowIndex = rowsArray.findIndex(row => row.contains(event.target));
-  const columns = Array.from(rowsArray[rowIndex].querySelectorAll('td'));
-  const columnIndex = columns.findIndex(column => column == event.target);
-  console.log(rowIndex, columnIndex)
-
-  name = tab.rows[rowIndex].cells[columnIndex].textContent
-
-  console.log("Name: " + name);
-  var currentCell = name;
-  i = rowIndex;
-  j = columnIndex;
-  while(currentCell === name){
-    tab.rows[i].cells[j].className = "remove";
-    tab.rows[i].cells[j].textContent = "";
-    j = columnIndex;
-    i++;
-    currentCell = tab.rows[i].cells[j].textContent;
-    console.log(currentCell);
-    //check right column
-    if(currentCell != name) {
-      j = columnIndex + 1;
-      currentCell = tab.rows[i].cells[j].textContent;
-    }
-    //check left column
-    if(currentCell != name) {
-      j = columnIndex - 1;
-      currentCell = tab.rows[i].cells[j].textContent;
-    }
-
-  }
-}

@@ -8,11 +8,6 @@
       <link href="https://bootswatch.com/4/journal/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
       <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 
-      <script>
-        function newEvent() {
-          window.open('assets/button.html');
-        }
-      </script>
       <title>SchedYou</title>
     </head>
 
@@ -51,14 +46,17 @@
 
           <small id="message" class="form-text text-muted"></small>
 
-          <button type="submit" class="btn btn-info" id= "send" onclick="calcFreeSpace()">Submit</button>
-          <button class="btn btn-secondary" onclick="window.close()">Cancel</button>
+          <button type="submit" class="btn btn-info" id= "send" onclick="addOrEditHandler()">Submit</button>
+          <button class="btn btn-secondary" onclick="decideClose()">Cancel</button>
+          <button id="removeButton" class="btn btn-info" onclick="remove()" style="visibility:hidden" disabled=true>Remove</button>
         </form>
       </div>
     </body>
 
     <script>
-      var eventID; // = getEventID()
+      var eventIDNo; // = getEventID()
+      var editing =false;
+      var eventList;
     </script>
 
 
@@ -66,6 +64,28 @@
       var getHours = require('date-fns/get_hours');
       var getMinutes = require('date-fns/get_minutes');
       var format = require('date-fns/format');
+
+      function addOrEditHandler() {
+          if (editing) {
+            deleteEvent(eventIDNo);
+          }
+          calcFreeSpace();
+      }
+      function remove() {
+        deleteEvent(eventIDNo);
+        //eventList = JSON.parse(localStorage.getItem("eventsArr"));
+        //console.dir(eventList);
+        
+        window.close();
+      }
+      function decideClose() {
+        /*
+        if (editing) {
+          calcFreeSpace();
+        }
+        */
+        window.close();
+      }
     function fillValues(eventObj) {
       var form = document.getElementById("form-start");
       console.dir(form);
@@ -79,13 +99,13 @@
         }
         else if(i == 2) {
          // form.children[i].children[1].value = getHours(eventObj.eStartDate) + ":" + startMins;
-          form.children[i].children[1].value = format(eventObj.eStartDate, 'HH:MM');
+          form.children[i].children[1].value = format(eventObj.eStartDate, 'HH:mm');
         }
         else if(i == 3) {
           form.children[i].children[1].value = format(eventObj.eStartDate,'YYYY-MM-DD');
         }
         else if(i == 4) {
-          form.children[i].children[1].value = format(eventObj.eEndDate, 'HH:MM');
+          form.children[i].children[1].value = format(eventObj.eEndDate, 'HH:mm');
         }
         else if(i == 5) {
           form.children[i].children[1].value = format(eventObj.eEndDate,'YYYY-MM-DD');
@@ -93,11 +113,21 @@
         
       }
     }
-    var obj = JSON.parse(localStorage.getItem("eventID"));
+    var obj = JSON.parse(localStorage.getItem("eventObj"));
     console.dir(obj);
-    if (obj.eName != undefined) {
+    if (obj != null) {
+      editing = true;
       fillValues(obj);
-      localStorage.setItem("eventID", "");
+      localStorage.setItem("eventObj", "");
+      var b =document.getElementById("removeButton");
+      b.style.visibility = "visible"
+      b.disabled = false;
+      eventIDNo=obj.eID;
+      console.log("READ ID: " + eventIDNo);
+
+    }
+    else {
+      editing = false;
     }
 
 
@@ -134,7 +164,7 @@
             document.getElementById("message").innerHTML = "Missing event name or length\nclick cancel to exit";
             return;
           }
-          eventID = getEventID();
+          //eventIDNo = getEventID();
 
           localStorage.setItem("name",eName);
           localStorage.setItem("desc", eDesc);
@@ -142,7 +172,7 @@
           localStorage.setItem("startDate", startDate);
           localStorage.setItem("end", end);
           localStorage.setItem("endDate",endDate);
-          localStorage.setItem("eventID",eventID);
+          //localStorage.setItem("eventID",eventIDNo);
 
           getCurrentWindow().hide();
       }
