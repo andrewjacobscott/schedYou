@@ -15,6 +15,10 @@
   var getHours = require('date-fns/get_hours');
   var getMinutes = require('date-fns/get_minutes');
   var minDiff = require('date-fns/difference_in_minutes');
+  var AWS = require('aws-sdk');
+  AWS.config.update({region: 'us-west-2'});
+  ddb = new AWS.DynamoDB({});
+  var tempArr = [];
   //const buttonModule = require('../assets/button.html');
   const {app, BrowserWindow, getCurrentWindow } = require('electron').remote;
   var fs = require('fs');
@@ -104,6 +108,7 @@
   }
 
   function startHeader() {
+    localStorage.clear();
     firstDayOfWeek = startOfWeek(startOfToday());
     lastDayOfWeek = endOfWeek(startOfToday());
     updateHeaders(firstDayOfWeek);
@@ -400,21 +405,8 @@
 
 function loadEvents(){
   var obj;
-  fs.readFile('data.json', 'utf8', function readFileCallback(err, data){
-    if (err){
-        console.log(err);
-    } else {
-      try{
-        obj = JSON.parse(data); //now it an object
-        for (x in obj) {
-          eventArr.push(obj[x]);
-          addEventToCalendar(obj[x]);
-        }
-    }catch{
-      console.log("Nothing to load!");
-    }
-    
-  }});
+  //load events from AWS
+  getEvents();
   fs.readFile('config.json','utf8', function (err,data){
     if (err) console.log(err);
     else {
@@ -432,23 +424,85 @@ function loadEvents(){
 }
 
 function saveEvents(){
-  fs.truncate('data.json', 0, function(){console.log('done clearing file')});
+  //send new Event array to AWS
+  sendEvents();
   fs.truncate('config.json', 0, function(){});
-  var json = JSON.stringify(eventArr);
-  fs.writeFile('data.json', json, function(err){
-    if(err) throw err;
-    //console.log("saved");
-  });
   console.dir(eventID);
   fs.writeFile('config.json', JSON.stringify(eventID), function(err) {
     if(err) throw err;
-    //console.log("savedmine");
   });
 }
 
 //clear saved data
 function clearData(){
   fs.truncate('data.json', 0, function(){console.log('done clearing file')});
+  deleteFromAWS();
   fs.truncate('config.json', 0, function(){console.log('done clearing config')});
 }
 
+function sendEvents(){
+  var params = {
+    TableName: 'Users',
+    Item: {
+      'UserID' : {N: '1'},
+      'EventArray' : {S: JSON.stringify(eventArr)},
+  }
+  }
+  ddb.putItem(params, function(err, data){
+    if(err) console.log(err);
+  });
+}
+
+async function getEvents(){
+  //set up parameters to read table events
+  await AWSRequest()
+  tempArr.forEach(element => {
+    console.log(element);
+    eventArr.push(element);
+    addEventToCalendar(element);
+  });
+
+}
+
+async function AWSRequest(){
+  var param = {
+    TableName: 'Users',
+    Key: {
+      'UserID' : {N: '1'},
+    },
+    ProjectionExpression: 'EventArray'
+  };
+  let promise = new Promise((resolve, reject) =>{
+      ddb.getItem(param, function(err, data) {
+          if (err) {
+              console.log("Error", err);
+          } else {
+              tempArr = JSON.parse(data.Item.EventArray.S);
+              resolve(1);
+          }    
+      });
+  });
+  let result = await promise;
+}
+
+function deleteFromAWS(){
+  var params = {
+    TableName: 'Users',
+    Key: {
+      'UserID' : {N: '1'},
+    }
+  }
+  ddb.deleteItem(params, function(err, data){
+    if (err) {
+      console.log("Error", err);
+    } else {
+      console.log("Successfully deleted data from AWS", data);
+    }
+  })
+}
+
+//removed loading from file, now loading from AWS
+//send items to AWS
+//load items from AWS
+//delete Items from AWS
+//frixed local Storage Issue with loading events from local storage

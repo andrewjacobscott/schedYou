@@ -22,11 +22,54 @@ var params = {
     }
 };
 
-ddb.putItem(params, function(err, data){
-    if(err){
-        console.log("Error", err);
-    }else{
-        console.log("Success", data);
-    }
-});
+// ddb.putItem(params, function(err, data){
+//     if(err){
+//         console.log("Error", err);
+//     }else{
+//         console.log("Success", data);
+//     }
+// });
+
+
+
+var param = {
+    TableName: 'Music',
+    Key: {
+      'Artist' : {S: 'Events'},
+      'SongTitle' : {S: 'Nothing but Rain!'},
+    },
+    ProjectionExpression: 'qbject'
+  };
+
+  g();
+  async function g(){
+    await f();
+    arr1.forEach(element => {
+        console.log(element);
+    });
+  }
+  
+  async function f(){
+    let promise = new Promise((resolve, reject) =>{
+        ddb.getItem(param, function(err, data) {
+            if (err) {
+                console.log("Error", err);
+            } else {
+                arr1 = JSON.parse(data.Item.qbject.S);
+                resolve(1);
+            }    
+        });
+    });
+    let result = await promise;
+    return result;
+  }
+
+
+
+ 
+
+  
+
+
+
 
