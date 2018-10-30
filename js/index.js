@@ -19,6 +19,7 @@
   AWS.config.update({region: 'us-west-2'});
   ddb = new AWS.DynamoDB({});
   var tempArr = [];
+  var tempUserArr = [];
   //const buttonModule = require('../assets/button.html');
   const {app, BrowserWindow, getCurrentWindow } = require('electron').remote;
   var fs = require('fs');
@@ -30,6 +31,7 @@
   
   
   var eventID=0; // want to load this value
+  var userID=0; // loaded from config.json if there.
   // Adjust this number depending on table entry representation
   // (pixel height of table slot)
   const TIMEBLOCKSIZE = 60;
@@ -44,6 +46,14 @@
     }
   });
   
+  function handleLogin() {
+    var username = document.getElementById("username").value;
+    console.log(username);
+    
+    document.getElementById("login").style.display = "none";
+    document.getElementById("hidecontainer").style.display = "contents";
+  }
+
   function editEvent(eventIDNo) {
     isEditing=true;
     let eventObj;
@@ -308,8 +318,8 @@
   // date is after the second, -1 if the first date
   // is before the second or 0 if dates are equal.
   function isEventInCalendar(eventObj) {
-    if (compareAsc(eventObj.eStartDate, firstDayOfWeek) < 0
-        || compareAsc(eventObj.eStartDate, lastDayOfWeek) > 0) {
+    if (compareAsc(parse(eventObj.eStartDate), firstDayOfWeek) < 0
+        || compareAsc(parse(eventObj.eStartDate), lastDayOfWeek) > 0) {
         // leave off end checks to allow starting in the week to be ended
         //|| compareAsc(eventObj.eEndDate, firstDayOfWeek) < 0
         //|| compareAsc(eventObj.eEndDate, lastDayOfWeek) > 0) {
@@ -333,7 +343,7 @@
       var index;
       var datePtr = firstDayOfWeek;
       for ( i = 0; i < 7; i++) {
-        if (isSameDay(eventObj.eStartDate, datePtr)) {
+        if (isSameDay(parse(eventObj.eStartDate), datePtr)) {
           return i; // index in day of week (0 is sunday,1 monday etc.)
         }
         else {
@@ -352,10 +362,12 @@
     if (dayFound === -1) {
       return;
     }
+    var localStart = parse(eventObj.eStartDate);
+    var localEnd = parse(eventObj.eEndDate);
 
-    var length = minDiff(eventObj.eEndDate, eventObj.eStartDate);
+    var length = minDiff(localEnd, localStart);
     var myBody = document.getElementById('myBody');
-    var startPoint = minDiff(eventObj.eStartDate, startOfDay(eventObj.eStartDate));
+    var startPoint = minDiff(localStart, startOfDay(localStart));
     var diff = length/TIMEBLOCKSIZE;
     //console.log("Difference: " + diff);
     // 1 offset to avoid first row of table. (header)
@@ -364,8 +376,8 @@
 
     var column = dayFound + 1; //offset from leftmost col.
     var i;
-    var startMins = getMinutes(eventObj.eStartDate);
-    var endMins = getMinutes(eventObj.eEndDate);
+    var startMins = getMinutes(localStart);
+    var endMins = getMinutes(localEnd);
     if (startMins < 10) {
       startMins = "0" + startMins;
     }
@@ -382,9 +394,9 @@
         tab.rows[i].cells[column].innerHTML = `<div class="event" title=` + eventObj.eName + ` data-index=""
         style="height:`+heightBox+`px" nodeValue=` + eventObj.eID + `>
         <p class="hidden">`+eventObj.eID+`</p>
-        <div class="start-time"><strong>` + getHours(eventObj.eStartDate) + ":" + startMins + `</strong></div>
+        <div class="start-time"><strong>` + getHours(localStart) + ":" + startMins + `</strong></div>
         <div class="description">` + eventObj.eDesc+ `</div>
-        <div class="end-time"><strong>` + getHours(eventObj.eEndDate) + ":" + endMins + `</strong></div>
+        <div class="end-time"><strong>` + getHours(localEnd) + ":" + endMins + `</strong></div>
         </div>`;
 
         tab.rows[i].cells[column].id = "definer";
@@ -428,6 +440,7 @@ function saveEvents(){
   sendEvents();
   fs.truncate('config.json', 0, function(){});
   console.dir(eventID);
+  configArr = {eventID, userID}
   fs.writeFile('config.json', JSON.stringify(eventID), function(err) {
     if(err) throw err;
   });
@@ -444,7 +457,7 @@ function sendEvents(){
   var params = {
     TableName: 'Users',
     Item: {
-      'UserID' : {N: '1'},
+      'UserID' : {N: userID},
       'EventArray' : {S: JSON.stringify(eventArr)},
   }
   }
@@ -468,7 +481,7 @@ async function AWSRequest(){
   var param = {
     TableName: 'Users',
     Key: {
-      'UserID' : {N: '1'},
+      'UserID' : {N: userID},
     },
     ProjectionExpression: 'EventArray'
   };
@@ -489,7 +502,7 @@ function deleteFromAWS(){
   var params = {
     TableName: 'Users',
     Key: {
-      'UserID' : {N: '1'},
+      'UserID' : {N: userID},
     }
   }
   ddb.deleteItem(params, function(err, data){

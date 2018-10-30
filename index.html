@@ -16,14 +16,19 @@
     <title>SchedYou</title>
   </head>
 
+  <div class="login" id="login">
+      <label for="username">Enter Username</label>
+      <input type="text" class="form-control" id="username" placeholder="Username" style="max-width:40%">
+      <button type="loginButton" class="btn btn-info" id= "send" onclick="handleLogin()">Login</button>
+  </div>
 
+  <div class="hidecontainer" id="hidecontainer">
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="#" onclick="deleteFromAWS()">SchedYou</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
 
       <span class="navbar-toggler-icon"></span>
     </button>
-
     <div class="collapse navbar-collapse" id="navbarColor03">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
@@ -338,6 +343,7 @@
 
 
 
+    </div>
     </div>
     <script>
     
