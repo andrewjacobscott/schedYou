@@ -27,9 +27,11 @@
   var firstDayOfWeek;
   var lastDayOfWeek;
   var isEditing=false;
-  
-  
+
+
   var eventID=0; // want to load this value
+  var userID=0;
+  var runningID=0;
   // Adjust this number depending on table entry representation
   // (pixel height of table slot)
   const TIMEBLOCKSIZE = 60;
@@ -43,7 +45,7 @@
         editEvent(target.firstElementChild.innerText);
     }
   });
-  
+
   function editEvent(eventIDNo) {
     isEditing=true;
     let eventObj;
@@ -75,10 +77,10 @@
        //console.log(element);
        addEventToCalendar(element);
      }
-       
+
   }
   function deleteEvent(eventIDNo) {
-    
+
     if (!eventArr.length) {
       eventArr = JSON.parse(localStorage.getItem("eventsArr"));
     }
@@ -104,7 +106,7 @@
     else {
       localStorage.setItem("eventsArr",JSON.stringify(eventArr));
     }
-    
+
   }
 
   function startHeader() {
@@ -113,7 +115,7 @@
     lastDayOfWeek = endOfWeek(startOfToday());
     updateHeaders(firstDayOfWeek);
   }
-  
+
   function getMonthAsString(month){
 	  if(month == 0){
 		  return "January";
@@ -153,7 +155,7 @@
 	  }
 	  return "trash";
   }
-	  
+
 
   function updateHeaders(weekStart) {
     var tab = document.getElementById('myTable');
@@ -192,7 +194,7 @@
 
   function newWeek(rightOrLeft) {
     emptyTable();
-    
+
      // if 1, forward a week.
      // if -1, backward a week.
      if (rightOrLeft === 1) {
@@ -240,7 +242,7 @@
       newWindow = new BrowserWindow({width: 1000, height: 600});
       newWindow.loadFile('assets/button.html');
 
-        
+
       let eventObj;
       newWindow.on('hide', () => {
         ++eventID;
@@ -261,7 +263,7 @@
         console.log(parse(localStorage.getItem("startDate") + 'T' +localStorage.getItem("start")));
         var test = JSON.stringify(eventObj.eStartDate);
         var testObj = JSON.parse(test);
-        
+
         //console.log(eventObj.eStartDate);
         //console.log(eventObj.eEndDate);
         console.log(test);
@@ -280,9 +282,9 @@
             addEventToCalendar(element);
           }
         }
-        
 
-        
+
+
         //addEventToCalendar(eventObj);
     });
     if (isEditing) {
@@ -302,7 +304,7 @@
       });
 
     }
-    
+
   }
   // Compare the two dates and return 1 if the first
   // date is after the second, -1 if the first date
@@ -406,6 +408,7 @@
 function loadEvents(){
   var obj;
   //load events from AWS
+  getUser();
   getEvents();
   fs.readFile('config.json','utf8', function (err,data){
     if (err) console.log(err);
@@ -420,7 +423,7 @@ function loadEvents(){
     }
   });
   //eventID = localStorage.getItem("eventIDcount");
-  
+
 }
 
 function saveEvents(){
@@ -444,13 +447,17 @@ function sendEvents(){
   var params = {
     TableName: 'Users',
     Item: {
-      'UserID' : {N: '1'},
+      'UserID' : {N: userID.toString()},
       'EventArray' : {S: JSON.stringify(eventArr)},
-  }
+    }
   }
   ddb.putItem(params, function(err, data){
     if(err) console.log(err);
   });
+}
+
+async function getUser() {
+  //await AWSRequestUser();
 }
 
 async function getEvents(){
@@ -468,7 +475,7 @@ async function AWSRequest(){
   var param = {
     TableName: 'Users',
     Key: {
-      'UserID' : {N: '1'},
+      'UserID' : {N: userID.toString()},
     },
     ProjectionExpression: 'EventArray'
   };
@@ -479,7 +486,36 @@ async function AWSRequest(){
           } else {
               tempArr = JSON.parse(data.Item.EventArray.S);
               resolve(1);
-          }    
+          }
+      });
+  });
+  let result = await promise;
+}
+
+async function AWSRequestUser() {
+  var param = {
+    TableName: 'UserKeys',
+    Key: {
+      'username' : {S: username},
+    },
+    ProjectionExpression: 'userKey'
+  };
+  let promise = new Promise((resolve, reject) =>{
+      ddb.getItem(param, function(err, data) {
+          if (err) {
+              console.log("Error", err);
+          } else {
+              if (Object.keys(data).length == 0) {
+                  addUser();
+                  resolve(1);
+              }
+              else {
+                var obj = JSON.parse(data.Item.userKey.N);
+                userID=parseInt(obj);
+                console.log("USER: " + username + " ID: " + userID);
+              }
+              resolve(1);
+          }
       });
   });
   let result = await promise;
@@ -489,7 +525,7 @@ function deleteFromAWS(){
   var params = {
     TableName: 'Users',
     Key: {
-      'UserID' : {N: '1'},
+      'UserID' : {N: userID.toString()},
     }
   }
   ddb.deleteItem(params, function(err, data){
