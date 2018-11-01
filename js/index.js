@@ -19,6 +19,7 @@
   AWS.config.update({region: 'us-west-2'});
   ddb = new AWS.DynamoDB({});
   var tempArr = [];
+  var tempUserArr = [];
   //const buttonModule = require('../assets/button.html');
   const {app, BrowserWindow, getCurrentWindow } = require('electron').remote;
   var fs = require('fs');
@@ -32,6 +33,8 @@
   var eventID=0; // want to load this value
   var userID=0;
   var runningID=0;
+  var username="";
+  var configArr=[];
   // Adjust this number depending on table entry representation
   // (pixel height of table slot)
   const TIMEBLOCKSIZE = 60;
@@ -45,6 +48,15 @@
         editEvent(target.firstElementChild.innerText);
     }
   });
+
+  function handleLogin() {
+    username = document.getElementById("username").value;
+    //console.log(username);
+
+    document.getElementById("login").style.display = "none";
+    document.getElementById("hidecontainer").style.display = "contents";
+    loadEvents();
+  }
 
   function editEvent(eventIDNo) {
     isEditing=true;
@@ -310,8 +322,8 @@
   // date is after the second, -1 if the first date
   // is before the second or 0 if dates are equal.
   function isEventInCalendar(eventObj) {
-    if (compareAsc(eventObj.eStartDate, firstDayOfWeek) < 0
-        || compareAsc(eventObj.eStartDate, lastDayOfWeek) > 0) {
+    if (compareAsc(parse(eventObj.eStartDate), firstDayOfWeek) < 0
+        || compareAsc(parse(eventObj.eStartDate), lastDayOfWeek) > 0) {
         // leave off end checks to allow starting in the week to be ended
         //|| compareAsc(eventObj.eEndDate, firstDayOfWeek) < 0
         //|| compareAsc(eventObj.eEndDate, lastDayOfWeek) > 0) {
@@ -335,7 +347,7 @@
       var index;
       var datePtr = firstDayOfWeek;
       for ( i = 0; i < 7; i++) {
-        if (isSameDay(eventObj.eStartDate, datePtr)) {
+        if (isSameDay(parse(eventObj.eStartDate), datePtr)) {
           return i; // index in day of week (0 is sunday,1 monday etc.)
         }
         else {
@@ -354,10 +366,12 @@
     if (dayFound === -1) {
       return;
     }
+    var localStart = parse(eventObj.eStartDate);
+    var localEnd = parse(eventObj.eEndDate);
 
-    var length = minDiff(eventObj.eEndDate, eventObj.eStartDate);
+    var length = minDiff(localEnd, localStart);
     var myBody = document.getElementById('myBody');
-    var startPoint = minDiff(eventObj.eStartDate, startOfDay(eventObj.eStartDate));
+    var startPoint = minDiff(localStart, startOfDay(localStart));
     var diff = length/TIMEBLOCKSIZE;
     //console.log("Difference: " + diff);
     // 1 offset to avoid first row of table. (header)
@@ -366,8 +380,8 @@
 
     var column = dayFound + 1; //offset from leftmost col.
     var i;
-    var startMins = getMinutes(eventObj.eStartDate);
-    var endMins = getMinutes(eventObj.eEndDate);
+    var startMins = getMinutes(localStart);
+    var endMins = getMinutes(localEnd);
     if (startMins < 10) {
       startMins = "0" + startMins;
     }
@@ -384,9 +398,9 @@
         tab.rows[i].cells[column].innerHTML = `<div class="event" title=` + eventObj.eName + ` data-index=""
         style="height:`+heightBox+`px" nodeValue=` + eventObj.eID + `>
         <p class="hidden">`+eventObj.eID+`</p>
-        <div class="start-time"><strong>` + getHours(eventObj.eStartDate) + ":" + startMins + `</strong></div>
+        <div class="start-time"><strong>` + getHours(localStart) + ":" + startMins + `</strong></div>
         <div class="description">` + eventObj.eDesc+ `</div>
-        <div class="end-time"><strong>` + getHours(eventObj.eEndDate) + ":" + endMins + `</strong></div>
+        <div class="end-time"><strong>` + getHours(localEnd) + ":" + endMins + `</strong></div>
         </div>`;
 
         tab.rows[i].cells[column].id = "definer";
@@ -415,10 +429,16 @@ function loadEvents(){
     else {
       try {
         console.log(data);
-        obj = JSON.parse(data);
-        eventID=parseInt(obj);
+        obj=JSON.parse(data);
+        console.log(obj);
+        if (Object.keys(data).length == 0) {
+          return;
+        }
+        eventID=parseInt(obj.eventID);
+        runningID=parseInt(obj.runningID);
+        console.log("EVENTID: " + eventID + " RUNNINGID: " + runningID);
       }catch{
-        console.log("nothing to load");
+        //console.log("nothing to load");
       }
     }
   });
@@ -431,7 +451,8 @@ function saveEvents(){
   sendEvents();
   fs.truncate('config.json', 0, function(){});
   console.dir(eventID);
-  fs.writeFile('config.json', JSON.stringify(eventID), function(err) {
+  configArr = {eventID, runningID};
+  fs.writeFile('config.json', JSON.stringify(configArr), function(err) {
     if(err) throw err;
   });
 }
@@ -456,8 +477,21 @@ function sendEvents(){
   });
 }
 
+async function addUser() {
+  var params = {
+    TableName: 'Users',
+    Item: {
+      'username' : {S: username},
+      'userKey' : {N: runningID.toString()},
+    }
+  }
+  userID = runningID++;
+  ddb.putItem(params, function(err, data){
+    if(err) console.log(err);
+  });
+}
 async function getUser() {
-  //await AWSRequestUser();
+  await AWSRequestUser();
 }
 
 async function getEvents(){
@@ -484,8 +518,14 @@ async function AWSRequest(){
           if (err) {
               console.log("Error", err);
           } else {
-              tempArr = JSON.parse(data.Item.EventArray.S);
-              resolve(1);
+              if (Object.keys(data).length == 0) {
+                resolve(1);
+              }
+              else {
+                tempArr = JSON.parse(data.Item.EventArray.S);
+                resolve(1);
+              }
+
           }
       });
   });
@@ -493,7 +533,7 @@ async function AWSRequest(){
 }
 
 async function AWSRequestUser() {
-  var param = {
+    var param = {
     TableName: 'UserKeys',
     Key: {
       'username' : {S: username},
@@ -529,6 +569,19 @@ function deleteFromAWS(){
     }
   }
   ddb.deleteItem(params, function(err, data){
+    if (err) {
+      console.log("Error", err);
+    } else {
+      console.log("Successfully deleted data from AWS", data);
+    }
+  })
+  var params2 = {
+    TableName: 'UserKeys',
+    Key: {
+      'username' : {S: username},
+    }
+  }
+  ddb.deleteItem(params2, function(err, data){
     if (err) {
       console.log("Error", err);
     } else {
