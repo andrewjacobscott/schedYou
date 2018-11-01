@@ -423,7 +423,7 @@ function loadEvents(){
   var obj;
   //load events from AWS
   getUser();
-  getEvents();
+
   fs.readFile('config.json','utf8', function (err,data){
     if (err) console.log(err);
     else {
@@ -479,7 +479,7 @@ function sendEvents(){
 
 async function addUser() {
   var params = {
-    TableName: 'Users',
+    TableName: 'UserKeys',
     Item: {
       'username' : {S: username},
       'userKey' : {N: runningID.toString()},
@@ -492,6 +492,7 @@ async function addUser() {
 }
 async function getUser() {
   await AWSRequestUser();
+  getEvents();
 }
 
 async function getEvents(){
@@ -513,16 +514,19 @@ async function AWSRequest(){
     },
     ProjectionExpression: 'EventArray'
   };
+  console.log("USER ID TO SEARCH: " + userID.toString());
   let promise = new Promise((resolve, reject) =>{
       ddb.getItem(param, function(err, data) {
           if (err) {
               console.log("Error", err);
           } else {
-              if (Object.keys(data).length == 0) {
+              if (data.Item == undefined) {
+                console.log("THIS USER HAS NO DATA");
                 resolve(1);
               }
               else {
                 tempArr = JSON.parse(data.Item.EventArray.S);
+                console.dir(tempArr);
                 resolve(1);
               }
 
