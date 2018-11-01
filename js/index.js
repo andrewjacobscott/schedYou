@@ -52,7 +52,6 @@
   function handleLogin() {
     username = document.getElementById("username").value;
     //console.log(username);
-
     document.getElementById("login").style.display = "none";
     document.getElementById("hidecontainer").style.display = "contents";
     loadEvents();
@@ -172,7 +171,7 @@
   function updateHeaders(weekStart) {
     var tab = document.getElementById('myTable');
     var datePtr = weekStart;
-	document.getElementById('month').textContent = getMonthAsString(getMonth(datePtr));
+	  document.getElementById('month').textContent = getMonthAsString(getMonth(datePtr));
     document.getElementById('myBody').scrollTop = 800;
     cellArray = tab.rows[0].cells;
     var i;

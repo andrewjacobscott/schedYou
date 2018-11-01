@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en" dir="ltr" style="height:100%">
   <head>
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="css/styles.css">
@@ -15,13 +15,15 @@
     </script>
     <title>SchedYou</title>
   </head>
+  <body style="height:100%; width:100%">
 
-  <div class="login" id="login">
-      <label for="username">Enter Username</label>
-      <input type="text" class="form-control" id="username" placeholder="Username" style="max-width:40%">
-      <button type="loginButton" class="btn btn-info" id= "send" onclick="handleLogin()">Login</button>
-  </div>
-
+    <div class="card" id="login" style="margin: 0 auto; margin-top: 15%; width:40%; text-align: center">
+      <h1 class="card-title">SchedYou</h1>
+      <input class="form-control form-control-lg" id ="username" type="text" placeholder="Username" style="max-width:80%; margin:0 auto; margin-bottom: 2%">
+      <input class="form-control form-control-lg" type="text" placeholder="password" style="max-width: 80%; margin: 0 auto; margin-bottom: 2%" readonly>
+      <button type="loginButton" class="btn btn-success" id= "send" onclick="handleLogin()">Login</button>
+    </div> 
+  
   <div class="hidecontainer" id="hidecontainer">
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="#" onclick="deleteFromAWS()">SchedYou</a>
@@ -344,11 +346,12 @@
 
 
     </div>
-    </div>
-    <script>
+  </div>
+  </body>
+  <script>
 
-    </script>
-    <script>
-        startHeader();
-    </script>
+  </script>
+  <script>
+    startHeader();
+  </script>
 </html>
