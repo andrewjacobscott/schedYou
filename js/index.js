@@ -19,41 +19,42 @@
   AWS.config.update({region: 'us-west-2'});
   ddb = new AWS.DynamoDB({});
   var tempArr = [];
+  var sharedCalenderArray = [];
   var tempUserArr = [];
   //const buttonModule = require('../assets/button.html');
   const {app, BrowserWindow, getCurrentWindow } = require('electron').remote;
   var fs = require('fs');
   var eventArr = [];
+  var sharedCals = [];
+  var sharedCalenderArrayTemp;
   //clearData();
   var firstDayOfWeek;
   var lastDayOfWeek;
   var isEditing=false;
-
-
   var eventID=0; // want to load this value
   var userID=0;
   var runningID=0;
   var username="";
   var configArr=[];
+  var shared = false;
+  var currentTableKey = 0;
+
   // Adjust this number depending on table entry representation
   // (pixel height of table slot)
   const TIMEBLOCKSIZE = 60;
-  var exports = module.exports = {};
-  var fs = require('fs');
-
-  document.addEventListener("click", function(e) {
-    var target = e.target;
-    //console.dir(target);
-    if (target.nodeName === "DIV" && target.className === "event") {
-        editEvent(target.firstElementChild.innerText);
-    }
-  });
 
   function handleLogin() {
     username = document.getElementById("username").value;
     //console.log(username);
     document.getElementById("login").style.display = "none";
     document.getElementById("hidecontainer").style.display = "contents";
+    document.getElementById('cal2').addEventListener("click", function(e) {
+      var target = e.target;
+      console.log(target);
+      if (target.nodeName === "DIV" && target.className === "event") {
+          editEvent(target.firstElementChild.innerText);
+      }
+    });
     loadEvents();
   }
 
@@ -67,19 +68,12 @@
         break;
       }
     }
-    //console.log("EID" + eventIDNo);
-    //console.dir(eventObj);
     localStorage.setItem("eventObj", JSON.stringify(eventObj));
     currentLength = eventArr.length;
     var j;
     localStorage.setItem("eventsArr", JSON.stringify(eventArr));
     //console.log("before event created");
     newEvent();
-    //console.log("AFTER EVENT CREATED");
-    //eventArr = JSON.parse(localStorage.getItem("eventsArr"));
-    /*if (eventArr.length > currentLength) {
-      deleteEvent(eventIDNo);
-    }*/
     emptyTable();
 
     var k;
@@ -90,6 +84,7 @@
      }
 
   }
+
   function deleteEvent(eventIDNo) {
 
     if (!eventArr.length) {
@@ -442,12 +437,15 @@ function loadEvents(){
     }
   });
   //eventID = localStorage.getItem("eventIDcount");
-
 }
 
 function saveEvents(){
   //send new Event array to AWS
-  sendEvents();
+  if(shared == false){
+    sendEvents();
+  }else{
+    sendSharedEvents();
+  }
   fs.truncate('config.json', 0, function(){});
   console.dir(eventID);
   configArr = {eventID, runningID};
@@ -466,22 +464,27 @@ function clearData(){
 function sendEvents(){
   var params = {
     TableName: 'Users',
-    Item: {
-      'UserID' : {N: userID.toString()},
-      'EventArray' : {S: JSON.stringify(eventArr)},
+    Key: {
+      'UserID' : {N: username.hashCode().toString()}
+    },
+    UpdateExpression: "set EventArray = :r",
+    ExpressionAttributeValues:{
+      ":r" : {S: JSON.stringify(eventArr)},
     }
   }
-  ddb.putItem(params, function(err, data){
+  ddb.updateItem(params, function(err, data){
     if(err) console.log(err);
   });
 }
-
+//switched to using a hashcode for a userid
 async function addUser() {
   var params = {
-    TableName: 'UserKeys',
+    TableName: 'Users',
     Item: {
-      'username' : {S: username},
-      'userKey' : {N: runningID.toString()},
+      'UserID' : {N: username.hashCode().toString()},
+      'Username' : {S: username},
+      'EventArray' : {S: JSON.stringify(eventArr)},
+      'SharedCal' : {S: JSON.stringify(sharedCals)},
     }
   }
   userID = runningID++;
@@ -489,31 +492,32 @@ async function addUser() {
     if(err) console.log(err);
   });
 }
+
 async function getUser() {
-  await AWSRequestUser();
+  await AWSRequest();
   getEvents();
 }
 
 async function getEvents(){
   //set up parameters to read table events
-  await AWSRequest()
+  await getSharedCalendars();
   tempArr.forEach(element => {
     console.log(element);
     eventArr.push(element);
     addEventToCalendar(element);
   });
-
 }
 
-async function AWSRequest(){
+/* get all the user's shared calender IDs */
+async function getSharedCalendars(){
+  localStorage.removeItem("SharedCal");
   var param = {
     TableName: 'Users',
     Key: {
-      'UserID' : {N: userID.toString()},
+      'UserID' : {N: username.hashCode().toString()},
     },
-    ProjectionExpression: 'EventArray'
+    ProjectionExpression: 'SharedCal'
   };
-  console.log("USER ID TO SEARCH: " + userID.toString());
   let promise = new Promise((resolve, reject) =>{
       ddb.getItem(param, function(err, data) {
           if (err) {
@@ -521,6 +525,68 @@ async function AWSRequest(){
           } else {
               if (data.Item == undefined) {
                 console.log("THIS USER HAS NO DATA");
+                resolve(1);
+              }
+              else {
+                sharedCalenderArray = JSON.parse(data.Item.SharedCal.S);
+                resolve(1);
+              }
+
+          }
+      });
+  });
+  let result = await promise;
+  var count = 0;
+  sharedCalenderArray.forEach(async function (num){
+    await getSharedCalendars1(num, count);
+    count++;
+  });
+  localStorage.setItem("SharedCal", JSON.stringify(sharedCalenderArray));
+}
+
+/* get all Shared Calender names for select option */
+async function getSharedCalendars1(item, c){
+  var params = {
+    TableName : 'SharedTable',
+    Key : {
+      'Table Key' : {N : item.toString()},
+    }
+  };
+
+  let promise = new Promise((resolve, reject) => {
+    ddb.getItem(params, function(err, data) {
+      if (err) {
+          console.log("Unable to read item: " + "\n" + JSON.stringify(err, undefined, 2));
+      } else {
+          var x = document.getElementById("selCal")
+          var option = document.createElement("option");
+          option.text = data.Item.CalName.S;
+          option.id = c
+          x.add(option);
+          resolve(1);
+      }
+    });
+  })
+  let re = await promise;
+}
+
+async function AWSRequest(){
+  var param = {
+    TableName: 'Users',
+    Key: {
+      'UserID' : {N: username.hashCode().toString()},
+    },
+    ProjectionExpression: 'EventArray'
+  };
+  console.log("USER ID TO SEARCH: " + username.hashCode());
+  let promise = new Promise((resolve, reject) =>{
+      ddb.getItem(param, function(err, data) {
+          if (err) {
+              console.log("Error", err);
+          } else {
+              if (data.Item == undefined) {
+                console.log("THIS USER HAS NO DATA");
+                addUser();
                 resolve(1);
               }
               else {
@@ -535,40 +601,34 @@ async function AWSRequest(){
   let result = await promise;
 }
 
-async function AWSRequestUser() {
+async function AWSRequestUser(user) {
     var param = {
-    TableName: 'UserKeys',
+    TableName: 'Users',
     Key: {
-      'username' : {S: username},
+      'UserID' : {N: user.toString()},
     },
-    ProjectionExpression: 'userKey'
+    ProjectionExpression: 'SharedCal'
   };
   let promise = new Promise((resolve, reject) =>{
       ddb.getItem(param, function(err, data) {
           if (err) {
               console.log("Error", err);
           } else {
-              if (Object.keys(data).length == 0) {
-                  addUser();
-                  resolve(1);
-              }
-              else {
-                var obj = JSON.parse(data.Item.userKey.N);
-                userID=parseInt(obj);
-                console.log("USER: " + username + " ID: " + userID);
-              }
-              resolve(1);
+              tempArr = JSON.parse(data.Item.SharedCal.S);
+              console.log(data)
+              resolve(data.Item.SharedCal);
           }
       });
   });
   let result = await promise;
+  return result;
 }
 
 function deleteFromAWS(){
   var params = {
     TableName: 'Users',
     Key: {
-      'UserID' : {N: userID.toString()},
+      'UserID' : {N: username.hashCode().toString()},
     }
   }
   ddb.deleteItem(params, function(err, data){
@@ -593,8 +653,167 @@ function deleteFromAWS(){
   })
 }
 
+function createSharedCalendar(){
+  const path = require('path')
+  localStorage.setItem("userName", username);
+  const modalPath = path.join('file://', __dirname, 'assets/shared.html')
+  let win = new BrowserWindow({ width: 600, height: 600 })
+  win.on('close', function () {
+     win = null
+     OnCloseShareCalendar()
+  })
+  win.loadURL(modalPath)
+  win.show()
+}
+
 //removed loading from file, now loading from AWS
 //send items to AWS
 //load items from AWS
 //delete Items from AWS
 //frixed local Storage Issue with loading events from local storage
+function OnCloseShareCalendar(){
+  users = JSON.parse(localStorage.getItem("shareUsers"))
+  if(users == null) return;
+  console.log(users)
+  
+  var tableID = 0;
+  users.forEach(function( u ){
+    tableID += u.hashCode()
+  }) 
+  var tempEventArray = [];
+  var params = {
+    TableName: 'SharedTable',
+    Item: {
+      'Table Key' : {N: tableID.toString()},
+      'CalName' : {S: localStorage.getItem("calShareName")},
+      'Users of this calendar' : {S: JSON.stringify(users)},
+      'Calendar' : {S : JSON.stringify(tempEventArray)}
+    }
+  }
+  ddb.putItem(params, function(err, data){
+    if(err) console.log(err);
+  });
+
+  localStorage.removeItem("shareUsers");
+  localStorage.removeItem("calShareName");
+
+  /* for each user we iterate thru and add the shared calendar ID to their Account */
+  users.forEach( async function(user){
+    var a = [];
+    tempArr = [];
+    await AWSRequestUser(user.hashCode());
+    console.log(tempArr)
+    tempArr.push(tableID);
+    var params = {
+      TableName: 'Users',
+      Key: {
+        'UserID' : {N: user.hashCode().toString()}
+      },
+      UpdateExpression: "set SharedCal = :r",
+      ExpressionAttributeValues:{
+        ":r" : {S: JSON.stringify(tempArr)},
+      }
+    }
+    ddb.updateItem(params, function(err, data){
+      if(err) console.log(err);
+    });
+    tempArr = []
+  })
+
+}
+String.prototype.hashCode = function() {
+  var hash = 0, i, chr;
+  if (this.length === 0) return hash;
+  for (i = 0; i < this.length; i++) {
+    chr   = this.charCodeAt(i);
+    hash  = ((hash << 5) - hash) + chr;
+    hash |= 0; // Convert to 32bit integer
+  }
+  return hash;
+};
+
+function changeCalendar(s){
+  var x = ""
+  var x =s[s.selectedIndex].value;
+  var i = s[s.selectedIndex].id;
+  eventArr = [];
+  console.log(i);
+  emptyTable();
+  if(x === "default"){
+    shared = false;
+    getUserSwap();
+  }else{
+    var sharedCalenderArray = JSON.parse(localStorage.getItem("SharedCal"));
+    let ev = sharedCalenderArray[i];
+    loadSharedEvents(ev);
+  }
+}
+
+async function loadSharedEvents(calName){
+  tempArr = [];
+  await AWSRequestShared(calName);
+  tempArr.forEach(element => {
+    console.log(element);
+    eventArr.push(element);
+    addEventToCalendar(element);
+  });
+
+}
+
+async function AWSRequestShared(cal){
+  currentTableKey = cal;
+  shared = true;
+  var param = {
+    TableName: 'SharedTable',
+    Key: {
+      'Table Key' : {N: cal.toString()},
+    },
+  };
+  let promise = new Promise((resolve, reject) =>{
+      ddb.getItem(param, function(err, data) {
+          if (err) {
+              console.log(err);
+          } else {
+              if (data.Item == undefined) {
+                console.log("THIS USER HAS NO DATA");
+                resolve(1);
+              }
+              else {
+                tempArr = JSON.parse(data.Item.Calendar.S);
+                resolve(1);
+              }
+
+          }
+      });
+  });
+  let result = await promise;
+}
+
+function sendSharedEvents(){
+  console.log("This is a shared Calendar updating:  " + currentTableKey)
+  var params = {
+    TableName: 'SharedTable',
+    Key: {
+      'Table Key' : {N: currentTableKey.toString()},
+    },
+    UpdateExpression: "set Calendar = :r",
+    ExpressionAttributeValues:{
+      ":r" : {S: JSON.stringify(eventArr)},
+    }
+  }
+  ddb.updateItem(params, function(err, data){
+    if(err) console.log(err);
+  });
+}
+
+async function getUserSwap() {
+
+  await AWSRequest();
+  tempArr.forEach(element => {
+    console.log(element);
+    eventArr.push(element);
+    addEventToCalendar(element);
+  });
+}
+
+

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+  <html style="height:100%">
+    <head>
+      <meta charset="utf-8">
+      <link rel="stylesheet" type="text/css" href="../css/styles.css">
+      <link href="https://bootswatch.com/4/journal/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+      <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+      <script>
+      
+      </script>
+
+    <title>Shared Calendar</title>
+    </head>
+    <body style="height:100%; width:100%" onload="loadThis()">
+            <div class="jumbotron">
+                    <p class="lead">Create a Shared Calendar</h1>
+                    <p>This is a calendar that will be shared between all users that you add.</p>
+                    <hr class="my-4">
+                    <p>Add a user by entering their username in the box below. Click on a row to remove the user.</p>
+                    <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text" id="basic-addon1">Group Name</span>
+                            </div>
+                            <input type="text" id= "calName" class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1">
+                          </div>
+                    <ul class ="list-group" id="listOfUsers" style="margin-bottom:5%"> </ul>
+
+                    <div class="btn-group btn-group-lg" role="group" aria-label="Basic example">
+                        <input type="text" id="username">    
+                        <button type="button" style="margin-left: 2%" class="btn btn-primary" onclick="addItem()">Add User</button>
+                        <button type="button" style="margin-left: 2%" class="btn btn-success" onclick="createSharedCalendar()">Create Calendar</button>
+                    </div>
+            </div>
+    </body>
+    <script>
+        
+        function loadThis(){
+            var name = localStorage.getItem("userName");
+            var u = document.getElementById("listOfUsers")
+            var li = document.createElement("li");
+            li.appendChild(document.createTextNode(name));
+            li.setAttribute("class", "list-group-item disabled")
+            u.appendChild(li);
+        }
+
+        function addItem(){
+            var input = document.getElementById("username").value.trim()
+            if(input.length < 1) return;
+            document.getElementById("username").value = ""
+            var u = document.getElementById("listOfUsers")
+            var li = document.createElement("li");
+            li.appendChild(document.createTextNode(input));
+            li.setAttribute("id", input)
+            li.setAttribute("class", "list-group-item list-group-item-action");
+            li.setAttribute("href", "#")
+            li.setAttribute("onclick", "removeItem(this.id)")
+            u.appendChild(li);
+        }
+
+        function removeItem(id){
+            var removeItem = document.getElementById(id)
+            var u = document.getElementById("listOfUsers")
+            u.removeChild(removeItem)
+        }
+
+        function createSharedCalendar(){
+            var usersToAdd = []
+            var ul = document.querySelectorAll("ul li");
+            
+            ul.forEach(function( student ) {
+                usersToAdd.push(student.innerHTML);
+            });
+            
+            localStorage.setItem("shareUsers", JSON.stringify(usersToAdd)); 
+            localStorage.setItem("calShareName", document.getElementById("calName").value.trim());
+            window.close();  
+            
+        }
+
+
+    </script>
+    </html>
