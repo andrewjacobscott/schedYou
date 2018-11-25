@@ -18,11 +18,12 @@
   },
   "homepage": "https://github.com/andrewjacobscott/schedYou#readme",
   "devDependencies": {
-    "electron": "^3.0.3"
+    "electron": "^3.0.10"
   },
   "dependencies": {
-    "aws-sdk": "^2.339.0",
+    "aws-sdk": "^2.361.0",
     "date-fns": "^1.29.0",
-    "electron-middle-sass": "^1.0.2"
+    "electron-middle-sass": "^1.0.2",
+    "googleapis": "^35.0.0"
   }
 }

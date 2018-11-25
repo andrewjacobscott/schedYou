@@ -37,12 +37,19 @@ var configArr = [];
 var shared = false;
 var currentTableKey = 0;
 
+
 // Adjust this number depending on table entry representation
 // (pixel height of table slot)
 const TIMEBLOCKSIZE = 60;
 
 function handleLogin() {
-    username = document.getElementById("username").value;
+    username = localStorage.getItem('user');
+    if(username == null){
+        username = document.getElementById("username").value;
+    }else{
+        localStorage.removeItem('user')
+    }
+    
     //console.log(username);
     document.getElementById("login").style.display = "none";
     document.getElementById("hidecontainer").style.display = "contents";
@@ -54,7 +61,7 @@ function handleLogin() {
         }
     });
     loadEvents();
-}
+};
 
 function editEvent(eventIDNo) {
     isEditing = true;
