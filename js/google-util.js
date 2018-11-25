@@ -1,4 +1,15 @@
 const {google} = require('googleapis');
+var path = require('path');
+var api;
+var enabled = true;
+try{
+    var api =  require( path.resolve( __dirname, "./js/keys.js" ));
+}catch(e){
+    console.log("Error api key is not avilable for google-auth");
+    enabled = false;
+}
+
+console.log(api);
 
 const googleConfig = {
     clientId: '820720206308-m5f88ojdrnaqnbn01kkkbi7t06f4asd0.apps.googleusercontent.com', // e.g. asdfghjkljhgfdsghjk.apps.googleusercontent.com
@@ -19,7 +30,7 @@ const defaultScope = [
 
 const plus = google.plus({
     version : 'v1',
-    auth : 'AIzaSyCZgO37EJWquaPaqaLCiLYLRsuU0RA4-OY'
+    auth : api
 })
  
 const url = oauth2Client.generateAuthUrl({
@@ -30,6 +41,11 @@ const url = oauth2Client.generateAuthUrl({
 
 
 function urlGoogle() {
+    if(enabled == false){
+        document.getElementById('googleAuth').style.visibility = 'hidden';
+        document.getElementById("error").innerText = "The API file keys.js has not been loaded into the JS folder, find it on slack"
+        return;
+    }
     var electron = require('electron');
     var wind = new electron.remote.BrowserWindow({width: 500, height: 600})
     wind.loadURL(url);
