@@ -44,9 +44,9 @@ const TIMEBLOCKSIZE = 60;
 
 function handleLogin() {
     username = localStorage.getItem('user');
-    if(username == null){
+    if (username == null) {
         username = document.getElementById("username").value;
-    }else{
+    } else {
         localStorage.removeItem('user')
     }
 
@@ -322,7 +322,7 @@ function newEvent() {
 
 function suggestTimes() {
     var popup = document.getElementById("suggestTimes");
-    popup.style.display="block";
+    popup.style.display = "block";
 }
 
 function suggest() {
@@ -518,6 +518,7 @@ async function getEvents() {
 /* get all the user's shared calender IDs */
 async function getSharedCalendars() {
     localStorage.removeItem("SharedCal");
+    sharedCalenderArray = [];
     var param = {
         TableName: 'Users',
         Key: {
@@ -536,6 +537,7 @@ async function getSharedCalendars() {
                 }
                 else {
                     sharedCalenderArray = JSON.parse(data.Item.SharedCal.S);
+                    console.log("retrieved shared calendar array");
                     resolve(1);
                 }
 
@@ -544,6 +546,13 @@ async function getSharedCalendars() {
     });
     let result = await promise;
     var count = 0;
+    var x = document.getElementById("selCal");
+    var option = document.createElement("option");
+    x.options.length = 0;
+    option.text = "My Calendar";
+    option.id = "default";
+    x.add(option);
+
     sharedCalenderArray.forEach(async function (num) {
         await getSharedCalendars1(num, count);
         count++;
@@ -553,11 +562,6 @@ async function getSharedCalendars() {
 
 /* get all Shared Calender names for select option */
 async function getSharedCalendars1(item, c) {
-    var x = document.getElementById("selCal");
-    var option = document.createElement("option");
-    option.text = "My Calendar";
-    option.id = "default";
-    x.add(option);
     var params = {
         TableName: 'SharedTable',
         Key: {
@@ -570,7 +574,8 @@ async function getSharedCalendars1(item, c) {
             if (err) {
                 console.log("Unable to read item: " + "\n" + JSON.stringify(err, undefined, 2));
             } else {
-                
+                console.log("adding element to select");
+                var x = document.getElementById("selCal");
                 var opt = document.createElement("option");
                 opt.text = data.Item.CalName.S;
                 opt.id = c
@@ -673,6 +678,7 @@ function createSharedCalendar() {
     win.on('close', function () {
         win = null
         OnCloseShareCalendar()
+
     })
     win.loadURL(modalPath)
     win.show()
@@ -700,7 +706,7 @@ function OnCloseShareCalendar() {
     ddb.putItem(params, function (err, data) {
         if (err) console.log(err);
     });
-
+    updateArray(tableID);
     localStorage.removeItem("shareUsers");
     localStorage.removeItem("calShareName");
 
@@ -819,4 +825,15 @@ async function getUserSwap() {
         eventArr.push(element);
         addEventToCalendar(element);
     });
+}
+
+function updateArray(id) {
+    var x = document.getElementById("selCal");
+    var opt = document.createElement("option");
+    opt.text = localStorage.getItem("calShareName");
+    opt.id = document.getElementById("selCal").childNodes.length - 2;
+    x.add(opt);
+    var a = JSON.parse(localStorage.getItem("SharedCal"));
+    a.push(id);
+    localStorage.setItem("SharedCal", JSON.stringify(a));
 }
