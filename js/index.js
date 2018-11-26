@@ -553,6 +553,11 @@ async function getSharedCalendars() {
 
 /* get all Shared Calender names for select option */
 async function getSharedCalendars1(item, c) {
+    var x = document.getElementById("selCal");
+    var option = document.createElement("option");
+    option.text = "My Calendar";
+    option.id = "default";
+    x.add(option);
     var params = {
         TableName: 'SharedTable',
         Key: {
@@ -565,11 +570,11 @@ async function getSharedCalendars1(item, c) {
             if (err) {
                 console.log("Unable to read item: " + "\n" + JSON.stringify(err, undefined, 2));
             } else {
-                var x = document.getElementById("selCal")
-                var option = document.createElement("option");
-                option.text = data.Item.CalName.S;
-                option.id = c
-                x.add(option);
+                
+                var opt = document.createElement("option");
+                opt.text = data.Item.CalName.S;
+                opt.id = c
+                x.add(opt);
                 resolve(1);
             }
         });
@@ -736,13 +741,11 @@ String.prototype.hashCode = function () {
 };
 
 function changeCalendar(s) {
-    var x = ""
-    var x = s[s.selectedIndex].value;
     var i = s[s.selectedIndex].id;
     eventArr = [];
     console.log(i);
     emptyTable();
-    if (x === "default") {
+    if (i === "default") {
         shared = false;
         getUserSwap();
     } else {
