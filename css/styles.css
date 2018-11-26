@@ -9,7 +9,7 @@ body{
 }
 
 .login{
-    height: 100%;  
+    height: 100%;
     max-width: 100%;
     min-width: 100%;
 }
@@ -79,6 +79,19 @@ td button{
   border-top: hidden !important; /*override*/
 }
 
+.suggestTimes {
+  border-bottom: 20px solid #dee2e6;
+  border-right: 20px solid #dee2e6;
+  border-left: 20px solid #dee2e6;
+  border-top: 20px solid #dee2e6;
+  background-color: #efefef;
+  height: 60%;
+  width: 60%;
+  position: absolute;
+  top: 50px;
+  left: 20%;
+  z-index: 2;
+}
 
 .event {
 border: 1px solid #b2dba1;
@@ -97,6 +110,7 @@ margin-bottom: 1px;
 height: 380px;
 word-wrap: break-word;
 position: relative;
+z-index: 1;
 
 }
 

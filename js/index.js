@@ -49,7 +49,7 @@ function handleLogin() {
     }else{
         localStorage.removeItem('user')
     }
-    
+
     //console.log(username);
     document.getElementById("login").style.display = "none";
     document.getElementById("hidecontainer").style.display = "contents";
@@ -320,6 +320,14 @@ function newEvent() {
 
 }
 
+function suggestTimes() {
+    var popup = document.getElementById("suggestTimes");
+    popup.style.display="block";
+}
+
+function suggest() {
+    var button = document.getElementById("suggestButton");
+}
 /*  Compare the two dates and return 1 if the first
     date is after the second, -1 if the first date
     is before the second or 0 if dates are equal. */
@@ -809,5 +817,3 @@ async function getUserSwap() {
         addEventToCalendar(element);
     });
 }
-
-

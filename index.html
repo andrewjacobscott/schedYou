@@ -19,6 +19,7 @@
             <button type="loginButton" class="btn btn-success" id="send" onclick="handleLogin()">Login</button>
             <p id="error"></p>
         </div>
+
         <div class="hidecontainer" id="hidecontainer">
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <a class="navbar-brand" href="#" onclick="deleteFromAWS()">SchedYou</a>
@@ -46,6 +47,7 @@
                             </button>
                         </div>
                         <div class="btn-group" role="group">
+                            <button onclick="suggestTimes()" type="button" class="btn btn-success">Suggest Event Times</button>
                             <button onclick="newEvent(false)" type="button" class="btn btn-success">Add Event</button>
                             <button onclick="createSharedCalendar()" type="button" class="btn btn-info">Create Shared
                                 Calendar</button>
@@ -53,7 +55,40 @@
                     </form>
                 </div>
             </nav>
+
             <div class="container">
+              <div class="suggestTimes" id="suggestTimes" style="margin: 0 auto; margin-top: 15%; text-align: center; display: none">
+                    <div class="form-group">
+                        <label for="name">Event title (Required)</label>
+                        <input type="text" class="form-control" id="name" placeholder="Event Title">
+                    </div>
+                    <div class="form-group">
+                        <label for="desc">Event Description</label>
+                        <textarea class="form-control" id="desc" placeholder="Event Description" rows="5" cols="50"></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label for="eventStart">Event Start Time</label>
+                            <input id="startDate" type="date" class="form-control">
+                        </div>
+                        <div class="col">
+                            <label for="eventEnd">Event End Time</label>
+                            <input id="endDate" type="date" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom:3%">
+                        <div class="col">
+                            <input id="start" type="time" value="08:00" class="form-control">
+                        </div>
+                        <div class="col">
+                            <input id="end" type="time" value="09:00" class="form-control">
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-primary btn-lg btn-block" id="send" onclick="addOrEditHandler()" >Get Suggestions</button>
+                    <button class="btn btn-danger btn-lg btn-block" onclick="decideClose()">Cancel</button>
+                    <button id="removeButton" class="btn btn-info btn-lg btn-block" onclick="remove()" style="visibility:hidden" disabled=true>Remove Event</button>
+                    <small id="message" class="form-text text-muted"></small>
+              </div>
                 <div class="panel panel-default" id="cal2">
                     <table class="table" id="myTable">
                         <thead>
