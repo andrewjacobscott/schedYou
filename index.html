@@ -58,7 +58,7 @@
             <div class="container">
               <div class="suggestTimes" id="suggestTimes" style="margin: 0 auto; margin-top: 15%; text-align: center; display: none">
                     <div class="form-group">
-                        <label for="name">Event title (Required)</label>
+                        <label for="name">Event title</label>
                         <input type="text" class="form-control" id="name" placeholder="Event Title">
                     </div>
                     <div class="form-group">
@@ -83,10 +83,16 @@
                             <input id="end" type="time" value="09:00" class="form-control">
                         </div>
                     </div>
-                    <button type="button" class="btn btn-primary btn-lg btn-block" id="send" onclick="addOrEditHandler()" >Get Suggestions</button>
-                    <button class="btn btn-danger btn-lg btn-block" onclick="decideClose()">Cancel</button>
-                    <button id="removeButton" class="btn btn-info btn-lg btn-block" onclick="remove()" style="visibility:hidden" disabled=true>Remove Event</button>
+                    <div class="form-group">
+                        <label for="name">Event Length</label>
+                        <input type="text" class="form-control" id="length" placeholder="Length (in hours)">
+                    </div>
+                    <button type="button" class="btn btn-primary btn-lg btn-block" id="send" onclick="suggest()" >Get Suggestions</button>
+                    <button class="btn btn-danger btn-lg btn-block" onclick="hideSuggest()">Cancel</button>
                     <small id="message" class="form-text text-muted"></small>
+                    <div class="listTimes" id="listTimes" style="display: none;">
+                        <ul class ="list-group" id="listOfTimes" style="margin-bottom:5%;"> </ul>
+                    </div>
               </div>
                 <div class="panel panel-default" id="cal2">
                     <table class="table" id="myTable">

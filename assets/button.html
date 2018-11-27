@@ -60,7 +60,7 @@
             }
             calcFreeSpace();
         }
-        
+
         function remove() {
             deleteEvent(eventIDNo);
             //eventList = JSON.parse(localStorage.getItem("eventsArr"));
@@ -68,7 +68,7 @@
 
             window.close();
         }
-        
+
         function decideClose() {
             /*
             if (editing) {
@@ -101,7 +101,7 @@
                         elements[i].value = format(eventObj.eEndDate, 'HH:mm');
                         break;
                     default:
-                        console.log(elementId) 
+                        console.log(elementId)
                 }
             }
         }
@@ -140,13 +140,16 @@
           }
           if(event.keyCode == 27){
             getCurrentWindow().close();
-  
+
           }
         });
         */
 
         function calcFreeSpace() {
             const { getCurrentWindow } = require('electron').remote;
+            var compareAsc = require('date-fns/compare_asc');
+            var parse = require('date-fns/parse');
+
             var eName = document.getElementById("name").value;
             var eDesc = document.getElementById("desc").value;
             var start = document.getElementById("start").value;
@@ -154,8 +157,11 @@
             var end = document.getElementById("end").value;
             var endDate = document.getElementById("endDate").value;
 
-            if (eName === "" || start === "" || startDate === "" || end === "") {
-                document.getElementById("message").innerHTML = "Missing event name or length\nclick cancel to exit";
+            var sDate = parse(startDate + 'T' + start);
+            var eDate = parse(endDate + 'T' + end);
+
+            if (eName === "" || start === "" || startDate === "" || end === "" || eDesc === "" || endDate === "" || compareAsc(eDate,sDate) <=0) {
+                document.getElementById("message").innerHTML = "Missing fields\nclick cancel to exit";
                 return;
             }
             //eventIDNo = getEventID();
@@ -169,8 +175,8 @@
             //localStorage.setItem("eventID",eventIDNo);
 
             getCurrentWindow().hide();
-        }  
-        
+        }
+
     </script>
 
 </html>

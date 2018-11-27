@@ -85,12 +85,27 @@ td button{
   border-left: 20px solid #dee2e6;
   border-top: 20px solid #dee2e6;
   background-color: #efefef;
-  height: 60%;
+  height: 80%;
   width: 60%;
   position: absolute;
   top: 50px;
   left: 20%;
   z-index: 2;
+}
+
+.listTimes {
+  border-bottom: 20px solid #dee2e6;
+  border-right: 20px solid #dee2e6;
+  border-left: 20px solid #dee2e6;
+  border-top: 20px solid #dee2e6;
+  background-color: #efefef;
+  height: 80%;
+  width: 60%;
+  position: absolute;
+  top: 25px;
+  left: 20%;
+  z-index: 3;
+  overflow: auto;
 }
 
 .event {

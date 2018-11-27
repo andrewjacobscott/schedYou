@@ -14,7 +14,11 @@ var compareAsc = require('date-fns/compare_asc');
 var parse = require('date-fns/parse');
 var getHours = require('date-fns/get_hours');
 var getMinutes = require('date-fns/get_minutes');
+var addMinutes = require('date-fns/add_minutes');
+var subMinutes = require('date-fns/sub_minutes');
 var minDiff = require('date-fns/difference_in_minutes');
+var dayDiff = require('date-fns/difference_in_calendar_days');
+var format = require('date-fns/format');
 var AWS = require('aws-sdk');
 AWS.config.update({ region: 'us-west-2' });
 ddb = new AWS.DynamoDB({});
@@ -326,7 +330,119 @@ function suggestTimes() {
 }
 
 function suggest() {
-    var button = document.getElementById("suggestButton");
+    var eName = document.getElementById("name").value;
+    var eDesc = document.getElementById("desc").value;
+    var start = document.getElementById("start").value;
+    var startDate = document.getElementById("startDate").value;
+    var end = document.getElementById("end").value;
+    var endDate = document.getElementById("endDate").value;
+    var length = parseFloat(document.getElementById("length").value);
+
+    var boundStart = parse(startDate + 'T' + start);
+    var boundEnd = parse(endDate + 'T' + end);
+
+    if (eName === "" || start === "" || startDate === "" || end === "" || eDesc === "" || endDate === "" || length == NaN || length > 24
+        || (dayDiff(boundEnd,boundStart) > 7)  || (minDiff(boundEnd,boundStart) <= 0) )  {
+        document.getElementById("message").innerHTML = "Missing/invalid fields\nclick cancel to exit";
+        return;
+    }
+    var listWin = document.getElementById("listTimes");
+    listWin.style.display = "block";
+
+    var u = document.getElementById("listOfTimes")
+
+    var valid;
+    var formatted;
+    var validStarts = [];
+    var numValid = -1;
+    var daysAdded=0;
+    var daysDifferent = dayDiff(boundEnd,boundStart);
+
+    var possibleStart = boundStart;
+    var possibleEnd = addMinutes(boundStart, 60*length);
+    var possibleTempStart = boundStart;
+
+    while (compareAsc(boundEnd,possibleEnd) >= 0) {
+        // if the current possible end extends past the boundary, move to next day
+        // allows midnight times to work, checks if the end time or new possible start are on the next day.
+          if (compareAsc(addDays(possibleEnd,daysDifferent-daysAdded),boundEnd) > 0 || !isSameDay(possibleStart,subMinutes(possibleEnd,1)) || !isSameDay(possibleTempStart, possibleStart)) {
+              daysAdded++;
+              possibleStart = addDays(boundStart,daysAdded);
+              possibleEnd = addMinutes(boundStart, 60*length);
+          }
+          valid=true;
+          tempArr.every(element => {
+              console.log("ELEMENT IN ARRAY::");
+              console.dir(element);
+              if(isSameDay(element.eStartDate,possibleStart)) {
+                  // if element starts before end of possible and ends after start of possible, collision
+                  if (compareAsc(element.eStartDate,possibleEnd) == -1 && compareAsc(element.eEndDate,possibleStart) == 1) {
+                      valid=false;
+                  }
+              }
+              return valid;
+          });
+
+          if (valid) {
+              validStarts.push(possibleStart);
+              numValid++;
+              formatted = format(possibleStart, 'MMMM Do, h:mmA');
+              var li = document.createElement("li");
+              li.appendChild(document.createTextNode(formatted));
+              li.setAttribute("id", numValid);
+              li.setAttribute("class", "list-group-item list-group-item-action");
+              li.setAttribute("href", "#");
+              li.addEventListener("click", function (e) {
+                  addEventDirectly(validStarts[this.id], eName, eDesc, length);
+              });
+              //li.setAttribute("onclick", "addEventDirectly(validStarts[this.id], eName, eDesc, length)")
+              u.appendChild(li);
+          }
+
+          possibleTempStart = possibleStart;
+          possibleStart = addMinutes(possibleStart, 30); // 30 minute increments in check
+          possibleEnd = addMinutes(possibleStart, 60*length);
+      }
+
+}
+
+function addEventDirectly(inEventStartTime, name, desc, length) {
+    ++eventID;
+    let eventObj = {
+        eName: name,
+        eDesc: desc,
+        //eLength:  localStorage.getItem("length")
+        eStartDate: inEventStartTime,
+        eEndDate: addMinutes(inEventStartTime,60*length),
+        eID: eventID
+    };
+    loadArray();
+    eventArr.push(eventObj);
+    saveEvents();
+    localStorage.setItem("eventsArr", JSON.stringify(eventArr));
+    emptyTable();
+    var k;
+    for (k = 0; k < eventArr.length; k++) {
+        var element = eventArr[k];
+        addEventToCalendar(element);
+    }
+    hideSuggest();
+}
+
+function hideSuggest() {
+    var popup = document.getElementById("suggestTimes");
+    document.getElementById("name").value="";
+    document.getElementById("desc").value="";
+    document.getElementById("startDate").value="";
+    document.getElementById("endDate").value="";
+    document.getElementById("start").value="08:00";
+    document.getElementById("end").value="09:00";
+    document.getElementById("length").value="";
+    popup.style.display = "none";
+    var listWin = document.getElementById("listTimes");
+    listWin.innerHTML='<ul class ="list-group" id="listOfTimes" style="margin-bottom:5%;"> </ul>';
+    listWin.style.display = "none";
+    document.getElementById("message").innerHTML="";
 }
 /*  Compare the two dates and return 1 if the first
     date is after the second, -1 if the first date
@@ -375,6 +491,7 @@ function addEventToCalendar(eventObj) {
     var myBody = document.getElementById('myBody');
     var startPoint = minDiff(localStart, startOfDay(localStart));
     var diff = length / TIMEBLOCKSIZE;
+
     //console.log("Difference: " + diff);
     // 1 offset to avoid first row of table. (header)
     startPoint = Math.floor(startPoint / TIMEBLOCKSIZE) + 1; // currently minutes, swapping to hours
@@ -390,15 +507,17 @@ function addEventToCalendar(eventObj) {
     if (endMins < 10) {
         endMins = "0" + endMins;
     }
+    var topBuff = (startMins)/TIMEBLOCKSIZE * 100 - 12;
     var tab = document.getElementById('myTable');
     var heightBox = diff * 100;
     var eventBlock;
     var found = false;
     for (i = startPoint; i < startPoint + Math.floor((length / TIMEBLOCKSIZE)); i++) {
         if (!found) {
+            console.log("HEIGHT: " + tab.rows[i].cells[column].offsetHeight);
             tab.rows[i].cells[column].textContent = eventObj.eName;
             tab.rows[i].cells[column].innerHTML = `<div class="event" title=` + eventObj.eName + ` data-index=""
-        style="height:`+ heightBox + `px" nodeValue=` + eventObj.eID + `>
+        style="height:`+ heightBox + `px; top:` + topBuff + `px" nodeValue=` + eventObj.eID + `>
         <p class="hidden">`+ eventObj.eID + `</p>
         <div class="start-time"><strong>` + getHours(localStart) + ":" + startMins + `</strong></div>
         <div class="description">` + eventObj.eDesc + `</div>
